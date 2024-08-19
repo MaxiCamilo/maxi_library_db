@@ -1,6 +1,7 @@
 name: maxi_library_db
 description: A starting point for Dart libraries or applications.
 version: 1.0.0
+publish_to: none
 # repository: https://github.com/my_org/my_repo
 
 environment:
@@ -9,6 +10,11 @@ environment:
 # Add regular dependencies here.
 dependencies:
   # path: ^1.8.0
+  maxi_library:
+  #git:
+    #  url: https://github.com/MaxiCamilo/maxi_library.git
+    #  ref: main
+    path: ../maxi_library
 
 dev_dependencies:
   lints: ^4.0.0

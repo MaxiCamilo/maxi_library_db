@@ -1,3 +1,7 @@
+import 'dart:typed_data';
+
+import 'package:maxi_library/maxi_library.dart';
+
 enum ColumnAttributesType {
   text,
   boolean,
@@ -11,11 +15,11 @@ enum ColumnAttributesType {
   uint16,
   uint32,
   uint64,
-  double,
+  doubleWithoutLimit,
   decimal,
   dateTime,
   binary,
-  dynamic,
+  dynamicType,
 }
 
 class ColumnAttributes {
@@ -30,4 +34,36 @@ class ColumnAttributes {
     required this.isPrimaryKey,
     required this.isUniqueKey,
   });
+
+  
+
+  factory ColumnAttributes.fromDartType({
+    required String nameColumn,
+    required Type type,
+    required bool isPrimaryKey,
+    required bool isUniqueKey,
+  }) {
+    return ColumnAttributes(
+      nameColumn: nameColumn,
+      type: searchColumnType(type),
+      isPrimaryKey: isPrimaryKey,
+      isUniqueKey: isUniqueKey,
+    );
+  }
+
+  static ColumnAttributesType searchColumnType(Type dartType) {
+    return switch (dartType) {
+      const (String) => ColumnAttributesType.text,
+      const (int) => ColumnAttributesType.intWithoutLimit,
+      const (double) => ColumnAttributesType.doubleWithoutLimit,
+      const (num) => ColumnAttributesType.doubleWithoutLimit,
+      const (bool) => ColumnAttributesType.boolean,
+      const (Enum) => ColumnAttributesType.uint8,
+      const (DateTime) => ColumnAttributesType.dateTime,
+      const (Uint8List) || const (List<int>) => ColumnAttributesType.binary,
+      _ => throw NegativeResult(identifier: NegativeResultCodes.wrongType, message: trc('The type %1 is not compatible for a database column', [dartType.toString()]))
+    };
+  }
+
+
 }

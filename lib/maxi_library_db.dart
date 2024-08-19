@@ -1,8 +1,5 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
-library;
+library maxi_library_db;
 
-export 'src/maxi_library_db_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'src/commands.dart';
+export 'src/engines.dart';
+export 'src/commands_adapters.dart';
