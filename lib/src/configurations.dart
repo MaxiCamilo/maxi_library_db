@@ -1,0 +1,1 @@
+export 'configurations/idatabase_configuration.dart';

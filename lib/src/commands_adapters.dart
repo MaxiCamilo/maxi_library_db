@@ -1,1 +1,0 @@
-export 'commands_adapters/icommands_adapter.dart';

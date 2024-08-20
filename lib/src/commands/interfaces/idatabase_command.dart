@@ -1,3 +1,1 @@
-mixin IDatabaseCommand {
-
-}
+mixin IDataBaseCommand {}

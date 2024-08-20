@@ -1,5 +1,5 @@
-enum ConditionCompareType{ equal, notEqual, greater, less, greaterEqual, lessEqual }
+enum ConditionCompareType { equal, notEqual, greater, less, greaterEqual, lessEqual }
 
 mixin IConditionQuery {
-
+  
 }

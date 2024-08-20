@@ -4,10 +4,12 @@ class CompareIncludesValues with IConditionQuery {
   final String fieldName;
   final List options;
   final bool shieldValue;
+  final bool isInclusive;
 
   const CompareIncludesValues({
     required this.fieldName,
     required this.options,
     this.shieldValue = true,
+    this.isInclusive = true,
   });
 }
