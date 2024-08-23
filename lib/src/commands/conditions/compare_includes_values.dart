@@ -1,5 +1,6 @@
-import 'package:maxi_library_db/src/commands/interfaces/icondition_query.dart';
+import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
 
+@reflectByMaxiLibraryDb
 class CompareIncludesValues with IConditionQuery {
   final String fieldName;
   final List options;

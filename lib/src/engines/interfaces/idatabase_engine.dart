@@ -1,11 +1,9 @@
 import 'package:maxi_library/maxi_library.dart';
-import 'package:maxi_library_db/src/engines/interfaces/idatabase_engine_capabilities.dart';
+import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
 
+@reflectByMaxiLibraryDb
 mixin IDataBaseEngine on IDataBaseEngineCapabilities {
-  Future<void> executeCommandAsTransaction({required Future<bool> Function(IDataBaseEngineCapabilities) function});
-  Future<TableResult?> executeQueryAsTransaction({required Future<TableResult?> Function(IDataBaseEngineCapabilities) function});
-
-  Future<T> reserveEngine<T>({required Future<T> Function(IDataBaseEngineCapabilities) function});
+  
 
   dynamic serializeToDatabase(dynamic item);
 

@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:maxi_library/maxi_library.dart';
+import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
 
+@reflectByMaxiLibraryDb
 enum ColumnAttributesType {
   text,
   boolean,
@@ -22,20 +24,21 @@ enum ColumnAttributesType {
   dynamicType,
 }
 
+@reflectByMaxiLibraryDb
 class ColumnAttributes {
   final String nameColumn;
   final ColumnAttributesType type;
   final bool isPrimaryKey;
   final bool isUniqueKey;
+  final bool isAutoIncrement;
 
   const ColumnAttributes({
     required this.nameColumn,
     required this.type,
-    required this.isPrimaryKey,
-    required this.isUniqueKey,
+    this.isPrimaryKey = false,
+    this.isUniqueKey = false,
+    this.isAutoIncrement = false,
   });
-
-  
 
   factory ColumnAttributes.fromDartType({
     required String nameColumn,
@@ -64,6 +67,4 @@ class ColumnAttributes {
       _ => throw NegativeResult(identifier: NegativeResultCodes.wrongType, message: trc('The type %1 is not compatible for a database column', [dartType.toString()]))
     };
   }
-
-
 }

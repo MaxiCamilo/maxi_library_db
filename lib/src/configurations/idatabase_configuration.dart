@@ -1,5 +1,6 @@
-import 'package:maxi_library_db/maxi_library_db.dart';
+import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
 
+@reflectByMaxiLibraryDb
 mixin IDataBaseConfiguration {
   IDataBaseEngine generateEngine();
 }

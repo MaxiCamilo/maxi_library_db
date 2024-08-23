@@ -1,6 +1,7 @@
-import 'package:maxi_library_db/src/commands/interfaces/icondition_query.dart';
+import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
 
-class ModifierCommand {
+@reflectByMaxiLibraryDb
+class ModifierCommand with IDataBaseCommand{
   final String tableName;
   final Map<String, dynamic> fieldData;
   final List<IConditionQuery> conditions;

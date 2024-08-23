@@ -1,7 +1,9 @@
-import 'package:maxi_library_db/src/commands/interfaces/icondition_query.dart';
+import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
 
+@reflectByMaxiLibraryDb
 enum CompareSimilarTextType { portion, startWith, endWith }
 
+@reflectByMaxiLibraryDb
 class CompareSimilarText with IConditionQuery {
   final String fieldName;
   final String similarText;

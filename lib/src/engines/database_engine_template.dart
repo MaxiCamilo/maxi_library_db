@@ -1,8 +1,11 @@
 import 'package:maxi_library/maxi_library.dart';
-import 'package:maxi_library_db/maxi_library_db.dart';
+import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
 
+@reflectByMaxiLibraryDb
 abstract class DataBaseEngineTemplate with IDataBaseEngineCapabilities, IDataBaseEngine {
   final _synchronizerEngine = Semaphore();
+
+  bool get inTransaction;
 
   Future<void> createTransaction();
   Future<void> commitTransaction();
@@ -39,21 +42,26 @@ abstract class DataBaseEngineTemplate with IDataBaseEngineCapabilities, IDataBas
   Future<TableResult> executeQueryDirectly({required QueryCommand command});
 
   @override
-  Future<void> executeCommandAsTransaction({required Future<bool> Function(IDataBaseEngineCapabilities) function}) {
+  Future<void> executeFunctionAsTransaction({required Future<bool> Function(IDataBaseEngineCapabilities) function}) {
     return reserveEngine(function: (x) async {
-      await createTransaction();
-      try {
-        final isCommit = await function(_DataBaseEngineTemplateReserved(baseEngine: this));
-        if (isCommit) {
-          await commitTransaction();
-        } else {
-          await rollbackTransaction();
-        }
-      } catch (_) {
-        await rollbackTransaction();
-        rethrow;
-      }
+      await executeFunctionAsTransactionDirectly(function: function);
     });
+  }
+
+  Future<bool> executeFunctionAsTransactionDirectly({required Future<bool> Function(IDataBaseEngineCapabilities) function}) async {
+    await createTransaction();
+    try {
+      final isCommit = await function(_DataBaseEngineTemplateReserved(baseEngine: this));
+      if (isCommit) {
+        await commitTransaction();
+      } else {
+        await rollbackTransaction();
+      }
+      return isCommit;
+    } catch (_) {
+      await rollbackTransaction();
+      rethrow;
+    }
   }
 
   @override
@@ -109,4 +117,29 @@ class _DataBaseEngineTemplateReserved with IDataBaseEngineCapabilities {
 
   @override
   Future<List<String>> getTableColumnsName({required String tableName}) => baseEngine.getTableColumnsNameDirectly(tableName: tableName);
+
+  @override
+  Future<T> reserveEngine<T>({required Future<T> Function(IDataBaseEngineCapabilities p1) function}) => function(this);
+
+  @override
+  Future<void> executeFunctionAsTransaction({required Future<bool> Function(IDataBaseEngineCapabilities p1) function}) async {
+    if (baseEngine.inTransaction) {
+      final isCommit = await function(this);
+      if (!isCommit) {
+        await baseEngine.rollbackTransaction();
+        await baseEngine.createTransaction();
+      }
+    } else {
+      await baseEngine.executeFunctionAsTransactionDirectly(function: function);
+    }
+  }
+
+  @override
+  Future<TableResult?> executeQueryAsTransaction({required Future<TableResult?> Function(IDataBaseEngineCapabilities p1) function}) {
+    if (baseEngine.inTransaction) {
+      return function(this);
+    } else {
+      return baseEngine.executeQueryAsTransaction(function: function);
+    }
+  }
 }

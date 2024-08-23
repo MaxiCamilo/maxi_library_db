@@ -1,7 +1,7 @@
-import 'package:maxi_library_db/maxi_library_db.dart';
-import 'package:maxi_library_db/src/commands/attributes_queries/foreign_key.dart';
+import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
 
-class CreateTableCommand {
+@reflectByMaxiLibraryDb
+class CreateTableCommand with IDataBaseCommand {
   final String name;
   final List<ColumnAttributes> columns;
   final List<List<String>> primaryKeyGroups;

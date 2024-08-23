@@ -1,5 +1,6 @@
-import 'package:maxi_library_db/src/commands/interfaces/icondition_query.dart';
+import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
 
+@reflectByMaxiLibraryDb
 class CompareFields with IConditionQuery {
   final String originField;
   final String compareField;

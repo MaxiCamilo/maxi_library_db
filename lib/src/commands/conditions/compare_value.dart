@@ -1,5 +1,6 @@
-import 'package:maxi_library_db/src/commands/interfaces/icondition_query.dart';
+import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
 
+@reflectByMaxiLibraryDb
 class CompareValue with IConditionQuery {
   final String originField;
   final dynamic value;
@@ -9,7 +10,7 @@ class CompareValue with IConditionQuery {
   const CompareValue({
     required this.originField,
     required this.value,
-    required this.typeComparation,
+    this.typeComparation = ConditionCompareType.equal,
     this.shieldValue = true,
   });
 }
