@@ -1,12 +1,12 @@
 import 'package:maxi_library/maxi_library.dart';
 import 'package:maxi_library_db/maxi_library_db.dart';
-import 'package:maxi_library_db/src/tools/table_operator/table_operator_editor.dart';
-import 'package:maxi_library_db/src/tools/table_operator/table_operator_init.dart';
-import 'package:maxi_library_db/src/tools/table_operator/table_operator_querys.dart';
+import 'package:maxi_library_db/src/tools/database_table_operator/database_table_operator_editor.dart';
+import 'package:maxi_library_db/src/tools/database_table_operator/database_table_operator_init.dart';
+import 'package:maxi_library_db/src/tools/database_table_operator/database_table_operator_querys.dart';
 
-enum TableOperatorOrderType { none, ascendant, descendant }
+enum DatabaseTableOperatorOrderType { none, ascendant, descendant }
 
-class TableOperator with StartableFunctionality {
+class DatabaseTableOperator with StartableFunctionality {
   final IDataBaseEngineCapabilities engine;
   final String tableName;
   final List<ColumnAttributes> columns;
@@ -21,11 +21,11 @@ class TableOperator with StartableFunctionality {
   late final bool _hasOnlyOnePrimaryKey;
   late final String _onePrimaryKey;
 
-  late final TableOperatorQuerys _querys;
-  late final TableOperatorEditor _editor;
+  late final DatabaseTableOperatorQuerys _querys;
+  late final DatabaseTableOperatorEditor _editor;
 
-  TableOperatorQuerys get querys => checkFirstIfInitialized(() => _querys);
-  TableOperatorEditor get editor => checkFirstIfInitialized(() => _editor);
+  DatabaseTableOperatorQuerys get querys => checkFirstIfInitialized(() => _querys);
+  DatabaseTableOperatorEditor get editor => checkFirstIfInitialized(() => _editor);
 
   String get nameOnlyOnePrimaryKey {
     if (!_hasOnlyOnePrimaryKey) {
@@ -38,7 +38,7 @@ class TableOperator with StartableFunctionality {
     return _onePrimaryKey;
   }
 
-  TableOperator({
+  DatabaseTableOperator({
     required this.engine,
     required this.tableName,
     required this.columns,
@@ -66,10 +66,10 @@ class TableOperator with StartableFunctionality {
 
   @override
   Future<void> initializeFunctionality() async {
-    await TableOperatorInit.initOperator(this);
+    await DatabaseTableOperatorInit.initOperator(this);
 
-    _querys = TableOperatorQuerys(this);
-    _editor = TableOperatorEditor(parent: this);
+    _querys = DatabaseTableOperatorQuerys(this);
+    _editor = DatabaseTableOperatorEditor(parent: this);
   }
 
   void checkContentMap({

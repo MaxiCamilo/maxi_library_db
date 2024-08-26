@@ -1,10 +1,10 @@
 import 'package:maxi_library/maxi_library.dart';
 import 'package:maxi_library_db/maxi_library_db.dart';
 
-class TableOperatorEditor {
-  final TableOperator parent;
+class DatabaseTableOperatorEditor {
+  final DatabaseTableOperator parent;
 
-  const TableOperatorEditor({required this.parent});
+  const DatabaseTableOperatorEditor({required this.parent});
 
   void _checkPropertyExitst(String? propertyName) {
     if (propertyName != null && !parent.columns.any((x) => x.nameColumn == propertyName)) {

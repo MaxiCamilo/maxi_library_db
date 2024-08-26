@@ -1,10 +1,10 @@
 import 'package:maxi_library/maxi_library.dart';
 import 'package:maxi_library_db/maxi_library_db.dart';
 
-class TableOperatorQuerys {
-  final TableOperator parent;
+class DatabaseTableOperatorQuerys {
+  final DatabaseTableOperator parent;
 
-  const TableOperatorQuerys(this.parent);
+  const DatabaseTableOperatorQuerys(this.parent);
 
   Future<List<Map<String, dynamic>>> getValues({
     List<QueryField> selectedFields = const [],
@@ -14,7 +14,7 @@ class TableOperatorQuerys {
     int? maximum,
     int? limit,
     String? identifierColumn,
-    TableOperatorOrderType order = TableOperatorOrderType.none,
+    DatabaseTableOperatorOrderType order = DatabaseTableOperatorOrderType.none,
   }) async {
     final allConditions = [...parent.limits, ...conditions];
 
@@ -29,9 +29,9 @@ class TableOperatorQuerys {
     }
 
     final orderQuery = <QueryOrder>[];
-    if (order == TableOperatorOrderType.ascendant || order == TableOperatorOrderType.descendant) {
+    if (order == DatabaseTableOperatorOrderType.ascendant || order == DatabaseTableOperatorOrderType.descendant) {
       identifierColumn ??= parent.nameOnlyOnePrimaryKey;
-      orderQuery.add(QueryOrder(fields: [identifierColumn], isAscendent: order == TableOperatorOrderType.ascendant));
+      orderQuery.add(QueryOrder(fields: [identifierColumn], isAscendent: order == DatabaseTableOperatorOrderType.ascendant));
     }
 
     final command = QueryCommand(
@@ -68,7 +68,7 @@ class TableOperatorQuerys {
           limit: range,
           minimun: minimun,
           maximum: maximum,
-          order: TableOperatorOrderType.ascendant,
+          order: DatabaseTableOperatorOrderType.ascendant,
           selectedFields: selectedFields,
         );
 
@@ -93,7 +93,7 @@ class TableOperatorQuerys {
           limit: range,
           minimun: minimun,
           maximum: maximum,
-          order: TableOperatorOrderType.descendant,
+          order: DatabaseTableOperatorOrderType.descendant,
           selectedFields: selectedFields,
         );
 
@@ -117,7 +117,7 @@ class TableOperatorQuerys {
     int? maximum,
     int? limit,
     String? identifierColumn,
-    TableOperatorOrderType order = TableOperatorOrderType.none,
+    DatabaseTableOperatorOrderType order = DatabaseTableOperatorOrderType.none,
   }) async {
     final allConditions = [...parent.limits, ...conditions];
     identifierColumn ??= parent.nameOnlyOnePrimaryKey;
@@ -131,8 +131,8 @@ class TableOperatorQuerys {
     }
 
     final orderQuery = <QueryOrder>[];
-    if (order == TableOperatorOrderType.ascendant || order == TableOperatorOrderType.descendant) {
-      orderQuery.add(QueryOrder(fields: [identifierColumn], isAscendent: order == TableOperatorOrderType.ascendant));
+    if (order == DatabaseTableOperatorOrderType.ascendant || order == DatabaseTableOperatorOrderType.descendant) {
+      orderQuery.add(QueryOrder(fields: [identifierColumn], isAscendent: order == DatabaseTableOperatorOrderType.ascendant));
     }
 
     final command = QueryCommand(
@@ -162,7 +162,7 @@ class TableOperatorQuerys {
       maximum: null,
       limit: 1,
       identifierColumn: null,
-      order: TableOperatorOrderType.none,
+      order: DatabaseTableOperatorOrderType.none,
     );
 
     if (result.isEmpty) {
@@ -189,10 +189,10 @@ class TableOperatorQuerys {
       maximum: null,
       limit: 1,
       identifierColumn: identifierColumn,
-      order: TableOperatorOrderType.none,
+      order: DatabaseTableOperatorOrderType.none,
     );
 
-    if (result.isEmpty) {
+    if (result.isEmpty || result.first.values.first == null) {
       return 0;
     }
 
@@ -216,10 +216,10 @@ class TableOperatorQuerys {
       maximum: null,
       limit: 1,
       identifierColumn: identifierColumn,
-      order: TableOperatorOrderType.none,
+      order: DatabaseTableOperatorOrderType.none,
     );
 
-    if (result.isEmpty) {
+    if (result.isEmpty || result.first.values.first == null) {
       return 0;
     }
 
@@ -246,7 +246,7 @@ class TableOperatorQuerys {
       maximum: null,
       limit: null,
       identifierColumn: identifierColumn,
-      order: TableOperatorOrderType.none,
+      order: DatabaseTableOperatorOrderType.none,
     );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:maxi_library/maxi_library.dart';
 import 'package:maxi_library_db/maxi_library_db.dart';
 
-mixin TableOperatorInit {
-  static Future<void> initOperator(TableOperator parent) async {
+mixin DatabaseTableOperatorInit {
+  static Future<void> initOperator(DatabaseTableOperator parent) async {
     if (await parent.engine.checkTableExists(tableName: parent.tableName)) {
       await _checkColumnNamesInTable(parent);
     } else {
@@ -17,7 +17,7 @@ mixin TableOperatorInit {
     }
   }
 
-  static Future<void> _checkColumnNamesInTable(TableOperator parent) async {
+  static Future<void> _checkColumnNamesInTable(DatabaseTableOperator parent) async {
     final existingColumn = (await parent.engine.getTableColumnsName(tableName: parent.tableName)).toList();
 
     for (final field in parent.columns) {
@@ -33,13 +33,12 @@ mixin TableOperatorInit {
     if (existingColumn.isNotEmpty) {
       throw NegativeResult(
         identifier: NegativeResultCodes.contextInvalidFunctionality,
-        message: trc(
-            'The table %1 has %2 extra columns, it cannot be used with the current context (the columns are %3)', [parent.tableName, existingColumn.length, TextUtilities.generateCommand(list: existingColumn)]),
+        message: trc('The table %1 has %2 extra columns, it cannot be used with the current context (the columns are %3)', [parent.tableName, existingColumn.length, TextUtilities.generateCommand(list: existingColumn)]),
       );
     }
   }
 
-  static Future<void> _createTable(TableOperator parent) async {
+  static Future<void> _createTable(DatabaseTableOperator parent) async {
     final command = CreateTableCommand(
       name: parent.tableName,
       columns: parent.columns,
