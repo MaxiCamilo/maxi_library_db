@@ -24,7 +24,7 @@ class DatabaseTableOperatorEditor {
       await engine.executeCommand(
         command: AggregatorCommand(
           tableName: parent.tableName,
-          fieldData: values,
+          dataField: values,
         ),
       );
       return true;
@@ -43,7 +43,7 @@ class DatabaseTableOperatorEditor {
         await engine.executeCommand(
           command: AggregatorCommand(
             tableName: parent.tableName,
-            fieldData: values,
+            dataField: values,
           ),
         );
       }
@@ -63,7 +63,7 @@ class DatabaseTableOperatorEditor {
         await engine.executeCommand(
           command: ModifierCommand(
             tableName: parent.tableName,
-            fieldData: values,
+            dataField: values,
             conditions: [...conditions, ...parent.limits],
           ),
         );
@@ -101,7 +101,7 @@ class DatabaseTableOperatorEditor {
         await engine.executeCommand(
           command: ModifierCommand(
             tableName: parent.tableName,
-            fieldData: values,
+            dataField: values,
             conditions: [CompareValue(originField: columnName!, value: values[columnName]), ...extraConditions, ...parent.limits],
           ),
         );

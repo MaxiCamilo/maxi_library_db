@@ -1,5 +1,6 @@
 import 'package:maxi_library/maxi_library.dart';
 import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
+import 'package:meta/meta.dart';
 
 @reflectByMaxiLibraryDb
 abstract class DataBaseEngineTemplate with IDataBaseEngineCapabilities, IDataBaseEngine {
@@ -96,6 +97,11 @@ abstract class DataBaseEngineTemplate with IDataBaseEngineCapabilities, IDataBas
         await releaseEngine();
       }
     });
+  }
+
+  @protected
+  Future<T> internalReserveEngine<T>({required Future<T> Function() function}) {
+    return _synchronizerEngine.execute(function: function);
   }
 }
 
