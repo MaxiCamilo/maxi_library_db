@@ -1,6 +1,6 @@
-import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
+import 'package:maxi_library/maxi_library.dart';
 
-@reflectByMaxiLibraryDb
+@reflect
 class QueryTable {
   final String fieldName;
   final String nickName;

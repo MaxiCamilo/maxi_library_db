@@ -1,9 +1,10 @@
-import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
+import 'package:maxi_library/maxi_library.dart';
+import 'package:maxi_library_db/maxi_library_db.dart';
 
-@reflectByMaxiLibraryDb
+@reflect
 enum QueryJoinerType { inner, left, rigth, fullOuter }
 
-@reflectByMaxiLibraryDb
+@reflect
 class QueryJoiner {
   final QueryTable originTable;
   final QueryTable externalTable;

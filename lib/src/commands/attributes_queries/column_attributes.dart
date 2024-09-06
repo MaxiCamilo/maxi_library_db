@@ -1,9 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:maxi_library/maxi_library.dart';
-import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
 
-@reflectByMaxiLibraryDb
+@reflect
 enum ColumnAttributesType {
   text,
   boolean,
@@ -24,7 +23,7 @@ enum ColumnAttributesType {
   dynamicType,
 }
 
-@reflectByMaxiLibraryDb
+@reflect
 class ColumnAttributes {
   final String nameColumn;
   final ColumnAttributesType type;

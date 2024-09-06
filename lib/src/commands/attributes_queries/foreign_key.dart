@@ -1,6 +1,6 @@
-import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
+import 'package:maxi_library/maxi_library.dart';
 
-@reflectByMaxiLibraryDb
+@reflect
 class ForeignKey {
   final String fieldName;
   final String tableName;

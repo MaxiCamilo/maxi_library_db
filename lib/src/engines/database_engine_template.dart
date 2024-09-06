@@ -1,8 +1,8 @@
 import 'package:maxi_library/maxi_library.dart';
-import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
+import 'package:maxi_library_db/maxi_library_db.dart';
 import 'package:meta/meta.dart';
 
-@reflectByMaxiLibraryDb
+@reflect
 abstract class DataBaseEngineTemplate with IDataBaseEngineCapabilities, IDataBaseEngine {
   final _synchronizerEngine = Semaphore();
 

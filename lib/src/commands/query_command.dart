@@ -1,6 +1,7 @@
-import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
+import 'package:maxi_library/maxi_library.dart';
+import 'package:maxi_library_db/maxi_library_db.dart';
 
-@reflectByMaxiLibraryDb
+@reflect
 class QueryCommand with IDataBaseCommand {
   final List<QueryField> selectedFields;
   final List<QueryTable> selectedTables;

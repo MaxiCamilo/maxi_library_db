@@ -1,6 +1,7 @@
-import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
+import 'package:maxi_library/maxi_library.dart';
+import 'package:maxi_library_db/maxi_library_db.dart';
 
-@reflectByMaxiLibraryDb
+@reflect
 class ModifierCommand with IDataBaseCommand {
   final String tableName;
   final Map<String, dynamic> dataField;

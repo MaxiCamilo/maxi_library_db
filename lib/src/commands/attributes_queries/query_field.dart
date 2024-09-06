@@ -1,9 +1,9 @@
-import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
+import 'package:maxi_library/maxi_library.dart';
 
-@reflectByMaxiLibraryDb
+@reflect
 enum QueryFieldType { field, count, maximum, minimum, average, sum }
 
-@reflectByMaxiLibraryDb
+@reflect
 class QueryField {
   final QueryFieldType type;
   final String fieldName;

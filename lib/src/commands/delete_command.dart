@@ -1,7 +1,8 @@
-import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
+import 'package:maxi_library/maxi_library.dart';
+import 'package:maxi_library_db/maxi_library_db.dart';
 
-@reflectByMaxiLibraryDb
-class DeleteCommand with IDataBaseCommand{
+@reflect
+class DeleteCommand with IDataBaseCommand {
   final String tableName;
   final List<IConditionQuery> conditions;
 

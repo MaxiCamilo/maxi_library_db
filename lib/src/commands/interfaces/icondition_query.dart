@@ -1,7 +1,7 @@
-import 'package:maxi_library_db/src/reflection/reflection_implementation.dart';
+import 'package:maxi_library/maxi_library.dart';
 
-@reflectByMaxiLibraryDb
+@reflect
 enum ConditionCompareType { equal, notEqual, greater, less, greaterEqual, lessEqual }
 
-@reflectByMaxiLibraryDb
+@reflect
 mixin IConditionQuery {}

@@ -1,5 +1,7 @@
+import 'package:maxi_library/maxi_library.dart';
 import 'package:maxi_library_db/maxi_library_db.dart';
 
+@reflect
 mixin IMultiDatabaseEngine on IDataBaseEngineCapabilities, IDataBaseEngine {
   Future<bool> checkDatabaseExists({required String databaseName});
 
