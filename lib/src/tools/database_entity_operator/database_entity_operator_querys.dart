@@ -29,7 +29,7 @@ class DatabaseEntityOperatorQuerys<T> {
       order: order,
     );
 
-    return _reflector.interpretAslist<T>(value: receivedMap, verify: verify);
+    return _reflector.interpretAslist<T>(value: receivedMap, verify: verify, tryToCorrectNames: false);
   }
 
   Stream<List<T>> streamValues({
@@ -50,7 +50,7 @@ class DatabaseEntityOperatorQuerys<T> {
           identifierColumn: identifierColumn,
           isAscendant: isAscendant,
         )
-        .map((x) => _reflector.interpretAslist<T>(value: x, verify: verify));
+        .map((x) => _reflector.interpretAslist<T>(value: x, verify: verify, tryToCorrectNames: false));
   }
 
   Future<List<int>> getIdentifier({
@@ -97,7 +97,7 @@ class DatabaseEntityOperatorQuerys<T> {
       identifierColumn: identifierColumn,
     );
 
-    return _reflector.interpretAslist<T>(value: receivedMap, verify: verify);
+    return _reflector.interpretAslist<T>(value: receivedMap, verify: verify, tryToCorrectNames: false);
   }
 
   Stream<List<int>> streamIdentifiers({
