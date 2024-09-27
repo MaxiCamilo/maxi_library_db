@@ -63,7 +63,7 @@ class ColumnAttributes {
       const (Enum) => ColumnAttributesType.uint8,
       const (DateTime) => ColumnAttributesType.dateTime,
       const (Uint8List) || const (List<int>) => ColumnAttributesType.binary,
-      _ => throw NegativeResult(identifier: NegativeResultCodes.wrongType, message: trc('The type %1 is not compatible for a database column', [dartType.toString()]))
+      _ => throw NegativeResult(identifier: NegativeResultCodes.wrongType, message: tr('The type %1 is not compatible for a database column', [dartType.toString()]))
     };
   }
 }

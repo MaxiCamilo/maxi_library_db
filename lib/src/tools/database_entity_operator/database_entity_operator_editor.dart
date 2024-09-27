@@ -31,7 +31,7 @@ class DatabaseEntityOperatorEditor<T> {
       } else if ((await _query.checkWhichIdentifiersExist(identifier: [_reflector.getPrimaryKey(instance: value)]).toList()).first.entries.first.value) {
         throw NegativeResult(
           identifier: NegativeResultCodes.contextInvalidFunctionality,
-          message: trc(
+          message: tr(
             'The aggregation failed because the property "%1" with value "%2" is already associated with a different item',
             [_reflector.primaryKey.name, _reflector.getPrimaryKey(instance: value)],
           ),
@@ -55,7 +55,7 @@ class DatabaseEntityOperatorEditor<T> {
           if (item.value) {
             throw NegativeResult(
               identifier: NegativeResultCodes.contextInvalidFunctionality,
-              message: trc(
+              message: tr(
                 'The aggregation failed because the property "%1" with value "%2" is already associated with a different item',
                 [_reflector.primaryKey.name, item.key],
               ),
@@ -93,7 +93,7 @@ class DatabaseEntityOperatorEditor<T> {
           if (!item.value) {
             throw NegativeResult(
               identifier: NegativeResultCodes.contextInvalidFunctionality,
-              message: trc(
+              message: tr(
                 'The modification cannot be performed because property "%1" has "%2" assigned to it, but it does not exist',
                 [_reflector.primaryKey.name, item.key],
               ),
@@ -119,7 +119,7 @@ class DatabaseEntityOperatorEditor<T> {
     int i = 1;
     for (final item in list) {
       volatileFactory(
-        negativeFactory: (rn) => NegativeResultValue.fromNegativeResult(nr: rn, value: item, name: trc('Value number %1', [i])),
+        negativeFactory: (rn) => NegativeResultValue.fromNegativeResult(nr: rn, value: item, name: tr('Value number %1', [i])),
         function: () => _reflector.verifyValueDirectly(value: item, parentEntity: null),
       );
     }
@@ -137,8 +137,8 @@ class DatabaseEntityOperatorEditor<T> {
       if (id <= 0) {
         throw NegativeResultValue(
           identifier: NegativeResultCodes.invalidProperty,
-          message: trc('The modification cannot be performed because item No. %1 does not have an assigned identifier', [i]),
-          name: _reflector.primaryKey.name,
+          message: tr('The modification cannot be performed because item No. %1 does not have an assigned identifier', [i]),
+          name: tr( _reflector.primaryKey.name),
           value: id,
         );
       }
