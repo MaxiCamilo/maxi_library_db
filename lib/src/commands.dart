@@ -11,11 +11,4 @@ export 'commands/attributes_queries/query_order.dart';
 export 'commands/attributes_queries/query_table.dart';
 export 'commands/attributes_queries/foreign_key.dart';
 
-export 'commands/interfaces/icondition_query.dart';
 export 'commands/interfaces/idatabase_command.dart';
-
-export 'commands/conditions/compare_fields.dart';
-export 'commands/conditions/compare_includes_values.dart';
-export 'commands/conditions/compare_multiple_comparisons.dart';
-export 'commands/conditions/compare_similar_text.dart';
-export 'commands/conditions/compare_value.dart';
