@@ -32,6 +32,35 @@ class DatabaseEntityOperatorQuerys<T> {
     return _reflector.interpretAslist<T>(value: receivedMap, verify: verify, tryToCorrectNames: false);
   }
 
+  Future<T?> getByIdentifierOptional({
+    required int identifier,
+    bool verify = true,
+  }) async {
+    final receivedMap = await _tableOperator.querys.getValues(
+      conditions: [CompareValue(originField: _tableOperator.nameOnlyOnePrimaryKey, value: identifier)],
+    );
+
+    final list = _reflector.interpretAslist<T>(value: receivedMap, verify: verify, tryToCorrectNames: false);
+    checkProgrammingFailure(thatChecks: tr('Only returns one or zero items'), result: () => list.length < 2);
+
+    return list.isEmpty ? null : list.first;
+  }
+
+  Future<T> getByIdentifier({
+    required int identifier,
+    bool verify = true,
+  }) async {
+    final item = await getByIdentifierOptional(identifier: identifier, verify: verify);
+    if (item == null) {
+      throw NegativeResult(
+        identifier: NegativeResultCodes.nonExistent,
+        message: tr('No item with the identifier %1 was found in the table'),
+      );
+    } else {
+      return item;
+    }
+  }
+
   Stream<List<T>> streamValues({
     List<IConditionQuery> conditions = const [],
     int? maximum,

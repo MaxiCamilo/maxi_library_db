@@ -51,6 +51,14 @@ class DatabaseEntityOperator<T> with StartableFunctionality {
           isUniqueKey: field.annotations.any((x) => x is UniqueKey),
         );
         columns.add(newColumn);
+      } else if (field.reflectedType is TypeEnumeratorReflector) {
+        final newColumn = ColumnAttributes.fromDartType(
+          nameColumn: field.name,
+          type: Enum,
+          isPrimaryKey: field.annotations.any((x) => x is PrimaryKey),
+          isUniqueKey: field.annotations.any((x) => x is UniqueKey),
+        );
+        columns.add(newColumn);
       } else {
         log('[DANGER!] The field ${field.name} is not a primitive data type');
       }
