@@ -72,35 +72,12 @@ class DatabaseTableOperator with StartableFunctionality {
     _editor = DatabaseTableOperatorEditor(parent: this);
   }
 
-  void checkContentMap({
+  Map<String, dynamic> convertValue({
     required Map<String, dynamic> values,
     required bool requireAllFields,
     required bool removeNonExistent,
-    bool checkAllPrimitives = true,
   }) {
-    if (checkAllPrimitives) {
-      for (final item in values.entries) {
-        if (ReflectionUtilities.isPrimitive(item.value) == null) {
-          throw NegativeResult(
-            identifier: NegativeResultCodes.invalidValue,
-            message: tr('The value of %1 is not a primitive data type', [item.key]),
-          );
-        }
-      }
-    }
-
-    for (final item in values.entries.toList()) {
-      if (!columns.any((x) => x.nameColumn == item.key)) {
-        if (removeNonExistent) {
-          values.remove(item.key);
-        } else {
-          throw NegativeResult(
-            identifier: NegativeResultCodes.invalidFunctionality,
-            message: tr('The table %1 does not contains the column named %2', [tableName, item.key]),
-          );
-        }
-      }
-    }
+    final newMap = <String, dynamic>{};
 
     if (requireAllFields) {
       for (final col in columns) {
@@ -112,5 +89,24 @@ class DatabaseTableOperator with StartableFunctionality {
         }
       }
     }
+
+    for (final item in values.entries.toList()) {
+      final column = columns.selectItem((x) => x.nameColumn == item.key);
+      if (column == null) {
+        if (removeNonExistent) {
+          values.remove(item.key);
+        } else {
+          throw NegativeResult(
+            identifier: NegativeResultCodes.invalidFunctionality,
+            message: tr('The table %1 does not contains the column named %2', [tableName, item.key]),
+          );
+        }
+        continue;
+      } else {
+        newMap[item.key] = column.valueAdapter.convertToPrimitiveValue(item.value);
+      }
+    }
+
+    return newMap;
   }
 }

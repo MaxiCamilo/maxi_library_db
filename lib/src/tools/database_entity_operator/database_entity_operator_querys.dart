@@ -154,4 +154,14 @@ class DatabaseEntityOperatorQuerys<T> {
       yield newMap;
     }
   }
+
+  Future<Map<int, bool>> checkWhichIdentifiersExistMap({required List<int> identifier, int range = 1000}) async {
+    final map = <int, bool>{};
+
+    await for (final part in checkWhichIdentifiersExist(identifier: identifier, range: range)) {
+      map.addAll(part);
+    }
+
+    return map;
+  }
 }

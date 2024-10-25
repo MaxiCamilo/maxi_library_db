@@ -42,26 +42,21 @@ class DatabaseEntityOperator<T> with StartableFunctionality {
 
   DatabaseTableOperator _generateTableOperator(ITypeEntityReflection reflector) {
     final columns = <ColumnAttributes>[];
-    for (final field in reflector.fields) {
-      if (field.reflectedType is TypePrimitiveReflection) {
-        final newColumn = ColumnAttributes.fromDartType(
-          nameColumn: field.name,
-          type: field.reflectedType.type,
-          isPrimaryKey: field.annotations.any((x) => x is PrimaryKey),
-          isUniqueKey: field.annotations.any((x) => x is UniqueKey),
-        );
-        columns.add(newColumn);
-      } else if (field.reflectedType is TypeEnumeratorReflector) {
-        final newColumn = ColumnAttributes.fromDartType(
-          nameColumn: field.name,
-          type: Enum,
-          isPrimaryKey: field.annotations.any((x) => x is PrimaryKey),
-          isUniqueKey: field.annotations.any((x) => x is UniqueKey),
-        );
-        columns.add(newColumn);
-      } else {
+    for (final field in reflector.fields.where((x) => !x.isStatic)) {
+      final posibleGenerator = ReflectionManager.tryGetPrimitiveAdapter(field.reflectedType.type, annotations: field.annotations);
+
+      if (posibleGenerator == null) {
         log('[DANGER!] The field ${field.name} is not a primitive data type');
+        continue;
       }
+
+      final newColumn = ColumnAttributes.fromDartType(
+        nameColumn: field.name,
+        type: posibleGenerator,
+        isPrimaryKey: field.annotations.any((x) => x is PrimaryKey),
+        isUniqueKey: field.annotations.any((x) => x is UniqueKey),
+      );
+      columns.add(newColumn);
     }
 
     return DatabaseTableOperator(

@@ -17,7 +17,7 @@ class DatabaseTableOperatorEditor {
 
   Future<void> add({required Map<String, dynamic> values, bool checkFields = true}) {
     if (checkFields) {
-      parent.checkContentMap(values: values, requireAllFields: true, removeNonExistent: true);
+      values = parent.convertValue(values: values, requireAllFields: true, removeNonExistent: true);
     }
 
     return parent.engine.executeFunctionAsTransaction(function: (engine) async {
@@ -33,8 +33,11 @@ class DatabaseTableOperatorEditor {
 
   Future<void> addAll({required List<Map<String, dynamic>> list, bool checkFields = true}) {
     if (checkFields) {
-      for (final value in list) {
-        parent.checkContentMap(values: value, requireAllFields: true, removeNonExistent: true);
+      final clon = list.toList(growable: false);
+      list = <Map<String, dynamic>>[];
+      for (final value in clon) {
+        final item = parent.convertValue(values: value, requireAllFields: true, removeNonExistent: true);
+        list.add(item);
       }
     }
 
@@ -53,8 +56,11 @@ class DatabaseTableOperatorEditor {
 
   Future<void> modifySeveral({required List<Map<String, dynamic>> list, required List<IConditionQuery> conditions, bool checkFields = true}) {
     if (checkFields) {
-      for (final value in list) {
-        parent.checkContentMap(values: value, requireAllFields: false, removeNonExistent: true);
+      final clon = list.toList(growable: false);
+      list = <Map<String, dynamic>>[];
+      for (final value in clon) {
+        final item = parent.convertValue(values: value, requireAllFields: true, removeNonExistent: true);
+        list.add(item);
       }
     }
 
@@ -83,8 +89,11 @@ class DatabaseTableOperatorEditor {
 
     if (checkFields) {
       int i = 1;
-      for (final value in list) {
-        parent.checkContentMap(values: value, requireAllFields: false, removeNonExistent: true);
+      final clon = list.toList(growable: false);
+      list = <Map<String, dynamic>>[];
+
+      for (final value in clon) {
+        final converted = parent.convertValue(values: value, requireAllFields: false, removeNonExistent: true);
         if (!value.containsKey(columnName)) {
           throw NegativeResult(
             identifier: NegativeResultCodes.nonExistent,
@@ -92,6 +101,7 @@ class DatabaseTableOperatorEditor {
           );
         }
 
+        list.add(converted);
         i += 1;
       }
     }

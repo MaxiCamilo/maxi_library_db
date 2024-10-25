@@ -1,10 +1,9 @@
-// ignore_for_file: unnecessary_const, unnecessary_import, duplicate_import, unused_import, invalid_use_of_protected_member
+// ignore_for_file: unnecessary_const, unnecessary_import, duplicate_import, unused_import
 
 import 'package:maxi_library/export_reflectors.dart';
 import 'package:maxi_library/maxi_library.dart';
 import 'package:maxi_library/maxi_library.dart';
 import 'package:maxi_library_db/maxi_library_db.dart';
-import 'dart:typed_data';
 import 'package:meta/meta.dart';
 import 'package:maxi_library_db/src/tools/database_table_operator/database_table_operator_editor.dart';
 import 'package:maxi_library_db/src/tools/database_table_operator/database_table_operator_init.dart';
@@ -69,36 +68,6 @@ class _ColumnAttributesTypeEnum extends TypeEnumeratorReflector {
             EnumOption(annotations: const [], value: ColumnAttributesType.dateTime),
             EnumOption(annotations: const [], value: ColumnAttributesType.binary),
             EnumOption(annotations: const [], value: ColumnAttributesType.dynamicType),
-          ],
-        );
-}
-
-class _CompareMultipleComparisonsLogicEnum extends TypeEnumeratorReflector {
-  const _CompareMultipleComparisonsLogicEnum()
-      : super(
-          type: CompareMultipleComparisonsLogic,
-          name: 'CompareMultipleComparisonsLogic',
-          annotations: const [reflect],
-          optionsList: const [
-            EnumOption(annotations: const [], value: CompareMultipleComparisonsLogic.and),
-            EnumOption(annotations: const [], value: CompareMultipleComparisonsLogic.or),
-          ],
-        );
-}
-
-class _ConditionCompareTypeEnum extends TypeEnumeratorReflector {
-  const _ConditionCompareTypeEnum()
-      : super(
-          type: ConditionCompareType,
-          name: 'ConditionCompareType',
-          annotations: const [reflect],
-          optionsList: const [
-            EnumOption(annotations: const [], value: ConditionCompareType.equal),
-            EnumOption(annotations: const [], value: ConditionCompareType.notEqual),
-            EnumOption(annotations: const [], value: ConditionCompareType.greater),
-            EnumOption(annotations: const [], value: ConditionCompareType.less),
-            EnumOption(annotations: const [], value: ConditionCompareType.greaterEqual),
-            EnumOption(annotations: const [], value: ConditionCompareType.lessEqual),
           ],
         );
 }
@@ -722,13 +691,45 @@ class _ColumnAttributesnameColumn extends GeneratedReflectedField<ColumnAttribut
   String getReservedValue({required ColumnAttributes? entity}) => entity!.nameColumn;
 }
 
-class _ColumnAttributestype extends GeneratedReflectedField<ColumnAttributes, ColumnAttributesType> {
-  const _ColumnAttributestype();
+class _ColumnAttributesvalueAdapter extends GeneratedReflectedField<ColumnAttributes, IPrimitiveValueGenerator> {
+  const _ColumnAttributesvalueAdapter();
   @override
   List get annotations => const [];
 
   @override
-  String get name => 'type';
+  String get name => 'valueAdapter';
+
+  @override
+  bool get isStatic => false;
+
+  @override
+  bool get isConst => false;
+
+  @override
+  bool get isLate => false;
+
+  @override
+  bool get isFinal => true;
+
+  @override
+  bool get acceptNull => false;
+
+  @override
+  bool get hasDefaultValue => false;
+  @override
+  IPrimitiveValueGenerator? get defaulValue => null;
+
+  @override
+  IPrimitiveValueGenerator getReservedValue({required ColumnAttributes? entity}) => entity!.valueAdapter;
+}
+
+class _ColumnAttributescolumnType extends GeneratedReflectedField<ColumnAttributes, ColumnAttributesType> {
+  const _ColumnAttributescolumnType();
+  @override
+  List get annotations => const [];
+
+  @override
+  String get name => 'columnType';
 
   @override
   bool get isStatic => false;
@@ -751,7 +752,7 @@ class _ColumnAttributestype extends GeneratedReflectedField<ColumnAttributes, Co
   ColumnAttributesType? get defaulValue => null;
 
   @override
-  ColumnAttributesType getReservedValue({required ColumnAttributes? entity}) => entity!.type;
+  ColumnAttributesType getReservedValue({required ColumnAttributes? entity}) => entity!.columnType;
 }
 
 class _ColumnAttributesisPrimaryKey extends GeneratedReflectedField<ColumnAttributes, bool> {
@@ -866,9 +867,9 @@ class _ColumnAttributessearchColumnTypeMethod extends GeneratedReflectedMethod<C
   @override
   List get annotations => const [];
 
-  static const _fix0 = GeneratedReflectedFixedParameter<Type>(
+  static const _fix0 = GeneratedReflectedFixedParameter<IPrimitiveValueGenerator>(
     annotations: const [],
-    name: 'dartType',
+    name: 'adapter',
     position: 0,
     hasDefaultValue: false,
     defaultValue: null,
@@ -907,12 +908,19 @@ class _ColumnAttributesBuilder extends GeneratedReflectedMethod<ColumnAttributes
     acceptNulls: false,
     name: 'nameColumn',
   );
-  static const _namtype = GeneratedReflectedNamedParameter<dynamic>(
+  static const _namvalueAdapter = GeneratedReflectedNamedParameter<dynamic>(
     annotations: const [],
     defaultValue: null,
     hasDefaultValue: false,
     acceptNulls: false,
-    name: 'type',
+    name: 'valueAdapter',
+  );
+  static const _namcolumnType = GeneratedReflectedNamedParameter<dynamic>(
+    annotations: const [],
+    defaultValue: null,
+    hasDefaultValue: false,
+    acceptNulls: false,
+    name: 'columnType',
   );
   static const _namisPrimaryKey = GeneratedReflectedNamedParameter<dynamic>(
     annotations: const [],
@@ -939,12 +947,13 @@ class _ColumnAttributesBuilder extends GeneratedReflectedMethod<ColumnAttributes
   List<GeneratedReflectedFixedParameter> get fixedParameters => const [];
 
   @override
-  List<GeneratedReflectedNamedParameter> get namedParameters => const [_namnameColumn, _namtype, _namisPrimaryKey, _namisUniqueKey, _namisAutoIncrement];
+  List<GeneratedReflectedNamedParameter> get namedParameters => const [_namnameColumn, _namvalueAdapter, _namcolumnType, _namisPrimaryKey, _namisUniqueKey, _namisAutoIncrement];
 
   @override
   ColumnAttributes callReservedMethod({required ColumnAttributes? entity, required List fixedValues, required Map<String, dynamic> namedValues}) => ColumnAttributes(
         nameColumn: _namnameColumn.getValueFromMap(namedValues),
-        type: _namtype.getValueFromMap(namedValues),
+        valueAdapter: _namvalueAdapter.getValueFromMap(namedValues),
+        columnType: _namcolumnType.getValueFromMap(namedValues),
         isPrimaryKey: _namisPrimaryKey.getValueFromMap(namedValues),
         isUniqueKey: _namisUniqueKey.getValueFromMap(namedValues),
         isAutoIncrement: _namisAutoIncrement.getValueFromMap(namedValues),
@@ -972,7 +981,7 @@ class _ColumnAttributesfromDartTypeFactorie extends GeneratedReflectedMethod<Col
     acceptNulls: false,
     name: 'nameColumn',
   );
-  static const _namtype = GeneratedReflectedNamedParameter<Type>(
+  static const _namtype = GeneratedReflectedNamedParameter<IPrimitiveValueGenerator>(
     annotations: const [],
     defaultValue: null,
     hasDefaultValue: false,
@@ -993,11 +1002,18 @@ class _ColumnAttributesfromDartTypeFactorie extends GeneratedReflectedMethod<Col
     acceptNulls: false,
     name: 'isUniqueKey',
   );
+  static const _namannotations = GeneratedReflectedNamedParameter<List<dynamic>>(
+    annotations: const [],
+    defaultValue: const [],
+    hasDefaultValue: true,
+    acceptNulls: false,
+    name: 'annotations',
+  );
   @override
   List<GeneratedReflectedFixedParameter> get fixedParameters => const [];
 
   @override
-  List<GeneratedReflectedNamedParameter> get namedParameters => const [_namnameColumn, _namtype, _namisPrimaryKey, _namisUniqueKey];
+  List<GeneratedReflectedNamedParameter> get namedParameters => const [_namnameColumn, _namtype, _namisPrimaryKey, _namisUniqueKey, _namannotations];
 
   @override
   ColumnAttributes callReservedMethod({required ColumnAttributes? entity, required List fixedValues, required Map<String, dynamic> namedValues}) => ColumnAttributes.fromDartType(
@@ -1005,6 +1021,7 @@ class _ColumnAttributesfromDartTypeFactorie extends GeneratedReflectedMethod<Col
         type: _namtype.getValueFromMap(namedValues),
         isPrimaryKey: _namisPrimaryKey.getValueFromMap(namedValues),
         isUniqueKey: _namisUniqueKey.getValueFromMap(namedValues),
+        annotations: _namannotations.getValueFromMap(namedValues),
       );
 }
 
@@ -1034,7 +1051,8 @@ class _ColumnAttributes extends GeneratedReflectedClass<ColumnAttributes> {
   List<GeneratedReflectedMethod> get methods => const [_ColumnAttributessearchColumnTypeMethod(), _ColumnAttributesBuilder(), _ColumnAttributesfromDartTypeFactorie()];
 
   @override
-  List<GeneratedReflectedField> get fields => const [_ColumnAttributesnameColumn(), _ColumnAttributestype(), _ColumnAttributesisPrimaryKey(), _ColumnAttributesisUniqueKey(), _ColumnAttributesisAutoIncrement()];
+  List<GeneratedReflectedField> get fields =>
+      const [_ColumnAttributesnameColumn(), _ColumnAttributesvalueAdapter(), _ColumnAttributescolumnType(), _ColumnAttributesisPrimaryKey(), _ColumnAttributesisUniqueKey(), _ColumnAttributesisAutoIncrement()];
 }
 /*----------------------------------   x   ----------------------------------*/
 
@@ -1357,1152 +1375,6 @@ class _ForeignKey extends GeneratedReflectedClass<ForeignKey> {
 
   @override
   List<GeneratedReflectedField> get fields => const [_ForeignKeyfieldName(), _ForeignKeytableName(), _ForeignKeyreferenceFieldName()];
-}
-/*----------------------------------   x   ----------------------------------*/
-
-/*----------------------------------   Class CompareFields   ----------------------------------*/
-
-/*COMPAREFIELDS FIELDS*/
-
-class _CompareFieldsoriginField extends GeneratedReflectedField<CompareFields, String> {
-  const _CompareFieldsoriginField();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'originField';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  String? get defaulValue => null;
-
-  @override
-  String getReservedValue({required CompareFields? entity}) => entity!.originField;
-}
-
-class _CompareFieldscompareField extends GeneratedReflectedField<CompareFields, String> {
-  const _CompareFieldscompareField();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'compareField';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  String? get defaulValue => null;
-
-  @override
-  String getReservedValue({required CompareFields? entity}) => entity!.compareField;
-}
-
-class _CompareFieldsoriginFieldTable extends GeneratedReflectedField<CompareFields, String> {
-  const _CompareFieldsoriginFieldTable();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'originFieldTable';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  String? get defaulValue => null;
-
-  @override
-  String getReservedValue({required CompareFields? entity}) => entity!.originFieldTable;
-}
-
-class _CompareFieldscompareFieldTable extends GeneratedReflectedField<CompareFields, String> {
-  const _CompareFieldscompareFieldTable();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'compareFieldTable';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  String? get defaulValue => null;
-
-  @override
-  String getReservedValue({required CompareFields? entity}) => entity!.compareFieldTable;
-}
-
-class _CompareFieldstypeComparation extends GeneratedReflectedField<CompareFields, ConditionCompareType> {
-  const _CompareFieldstypeComparation();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'typeComparation';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  ConditionCompareType? get defaulValue => null;
-
-  @override
-  ConditionCompareType getReservedValue({required CompareFields? entity}) => entity!.typeComparation;
-}
-
-/*COMPAREFIELDS METHODS*/
-
-class _CompareFieldsBuilder extends GeneratedReflectedMethod<CompareFields, CompareFields> {
-  const _CompareFieldsBuilder();
-  @override
-  String get name => '';
-
-  @override
-  bool get isStatic => true;
-
-  @override
-  MethodDetectedType get methodType => MethodDetectedType.buildMethod;
-
-  @override
-  List get annotations => const [];
-
-  static const _namoriginField = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: null,
-    hasDefaultValue: false,
-    acceptNulls: false,
-    name: 'originField',
-  );
-  static const _namcompareField = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: null,
-    hasDefaultValue: false,
-    acceptNulls: false,
-    name: 'compareField',
-  );
-  static const _namtypeComparation = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: ConditionCompareType.equal,
-    hasDefaultValue: true,
-    acceptNulls: false,
-    name: 'typeComparation',
-  );
-  static const _namoriginFieldTable = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: '',
-    hasDefaultValue: true,
-    acceptNulls: false,
-    name: 'originFieldTable',
-  );
-  static const _namcompareFieldTable = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: '',
-    hasDefaultValue: true,
-    acceptNulls: false,
-    name: 'compareFieldTable',
-  );
-  @override
-  List<GeneratedReflectedFixedParameter> get fixedParameters => const [];
-
-  @override
-  List<GeneratedReflectedNamedParameter> get namedParameters => const [_namoriginField, _namcompareField, _namtypeComparation, _namoriginFieldTable, _namcompareFieldTable];
-
-  @override
-  CompareFields callReservedMethod({required CompareFields? entity, required List fixedValues, required Map<String, dynamic> namedValues}) => CompareFields(
-        originField: _namoriginField.getValueFromMap(namedValues),
-        compareField: _namcompareField.getValueFromMap(namedValues),
-        typeComparation: _namtypeComparation.getValueFromMap(namedValues),
-        originFieldTable: _namoriginFieldTable.getValueFromMap(namedValues),
-        compareFieldTable: _namcompareFieldTable.getValueFromMap(namedValues),
-      );
-}
-
-/*COMPAREFIELDS INSTANCE*/
-
-class _CompareFields extends GeneratedReflectedClass<CompareFields> {
-  const _CompareFields();
-  @override
-  List get annotations => const [reflect];
-
-  @override
-  Type? get baseClass => null;
-
-  @override
-  List<Type> get classThatImplement => const [IConditionQuery];
-
-  @override
-  bool get isAbstract => false;
-
-  @override
-  bool get isMixin => false;
-
-  @override
-  String get name => 'CompareFields';
-
-  @override
-  List<GeneratedReflectedMethod> get methods => const [_CompareFieldsBuilder()];
-
-  @override
-  List<GeneratedReflectedField> get fields => const [_CompareFieldsoriginField(), _CompareFieldscompareField(), _CompareFieldsoriginFieldTable(), _CompareFieldscompareFieldTable(), _CompareFieldstypeComparation()];
-}
-/*----------------------------------   x   ----------------------------------*/
-
-/*----------------------------------   Class CompareValue   ----------------------------------*/
-
-/*COMPAREVALUE FIELDS*/
-
-class _CompareValueoriginField extends GeneratedReflectedField<CompareValue, String> {
-  const _CompareValueoriginField();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'originField';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  String? get defaulValue => null;
-
-  @override
-  String getReservedValue({required CompareValue? entity}) => entity!.originField;
-}
-
-class _CompareValuevalue extends GeneratedReflectedField<CompareValue, dynamic> {
-  const _CompareValuevalue();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'value';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  dynamic get defaulValue => null;
-
-  @override
-  dynamic getReservedValue({required CompareValue? entity}) => entity!.value;
-}
-
-class _CompareValuetypeComparation extends GeneratedReflectedField<CompareValue, ConditionCompareType> {
-  const _CompareValuetypeComparation();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'typeComparation';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  ConditionCompareType? get defaulValue => null;
-
-  @override
-  ConditionCompareType getReservedValue({required CompareValue? entity}) => entity!.typeComparation;
-}
-
-class _CompareValueshieldValue extends GeneratedReflectedField<CompareValue, bool> {
-  const _CompareValueshieldValue();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'shieldValue';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  bool? get defaulValue => null;
-
-  @override
-  bool getReservedValue({required CompareValue? entity}) => entity!.shieldValue;
-}
-
-class _CompareValueselectedTable extends GeneratedReflectedField<CompareValue, String> {
-  const _CompareValueselectedTable();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'selectedTable';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  String? get defaulValue => null;
-
-  @override
-  String getReservedValue({required CompareValue? entity}) => entity!.selectedTable;
-}
-
-/*COMPAREVALUE METHODS*/
-
-class _CompareValueBuilder extends GeneratedReflectedMethod<CompareValue, CompareValue> {
-  const _CompareValueBuilder();
-  @override
-  String get name => '';
-
-  @override
-  bool get isStatic => true;
-
-  @override
-  MethodDetectedType get methodType => MethodDetectedType.buildMethod;
-
-  @override
-  List get annotations => const [];
-
-  static const _namoriginField = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: null,
-    hasDefaultValue: false,
-    acceptNulls: false,
-    name: 'originField',
-  );
-  static const _namvalue = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: null,
-    hasDefaultValue: false,
-    acceptNulls: false,
-    name: 'value',
-  );
-  static const _namtypeComparation = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: ConditionCompareType.equal,
-    hasDefaultValue: true,
-    acceptNulls: false,
-    name: 'typeComparation',
-  );
-  static const _namshieldValue = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: true,
-    hasDefaultValue: true,
-    acceptNulls: false,
-    name: 'shieldValue',
-  );
-  static const _namselectedTable = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: '',
-    hasDefaultValue: true,
-    acceptNulls: false,
-    name: 'selectedTable',
-  );
-  @override
-  List<GeneratedReflectedFixedParameter> get fixedParameters => const [];
-
-  @override
-  List<GeneratedReflectedNamedParameter> get namedParameters => const [_namoriginField, _namvalue, _namtypeComparation, _namshieldValue, _namselectedTable];
-
-  @override
-  CompareValue callReservedMethod({required CompareValue? entity, required List fixedValues, required Map<String, dynamic> namedValues}) => CompareValue(
-        originField: _namoriginField.getValueFromMap(namedValues),
-        value: _namvalue.getValueFromMap(namedValues),
-        typeComparation: _namtypeComparation.getValueFromMap(namedValues),
-        shieldValue: _namshieldValue.getValueFromMap(namedValues),
-        selectedTable: _namselectedTable.getValueFromMap(namedValues),
-      );
-}
-
-/*COMPAREVALUE INSTANCE*/
-
-class _CompareValue extends GeneratedReflectedClass<CompareValue> {
-  const _CompareValue();
-  @override
-  List get annotations => const [reflect];
-
-  @override
-  Type? get baseClass => null;
-
-  @override
-  List<Type> get classThatImplement => const [IConditionQuery];
-
-  @override
-  bool get isAbstract => false;
-
-  @override
-  bool get isMixin => false;
-
-  @override
-  String get name => 'CompareValue';
-
-  @override
-  List<GeneratedReflectedMethod> get methods => const [_CompareValueBuilder()];
-
-  @override
-  List<GeneratedReflectedField> get fields => const [_CompareValueoriginField(), _CompareValuevalue(), _CompareValuetypeComparation(), _CompareValueshieldValue(), _CompareValueselectedTable()];
-}
-/*----------------------------------   x   ----------------------------------*/
-
-/*----------------------------------   Class CompareSimilarText   ----------------------------------*/
-
-/*COMPARESIMILARTEXT FIELDS*/
-
-class _CompareSimilarTextfieldName extends GeneratedReflectedField<CompareSimilarText, String> {
-  const _CompareSimilarTextfieldName();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'fieldName';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  String? get defaulValue => null;
-
-  @override
-  String getReservedValue({required CompareSimilarText? entity}) => entity!.fieldName;
-}
-
-class _CompareSimilarTextsimilarText extends GeneratedReflectedField<CompareSimilarText, String> {
-  const _CompareSimilarTextsimilarText();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'similarText';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  String? get defaulValue => null;
-
-  @override
-  String getReservedValue({required CompareSimilarText? entity}) => entity!.similarText;
-}
-
-class _CompareSimilarTextshieldValue extends GeneratedReflectedField<CompareSimilarText, bool> {
-  const _CompareSimilarTextshieldValue();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'shieldValue';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  bool? get defaulValue => null;
-
-  @override
-  bool getReservedValue({required CompareSimilarText? entity}) => entity!.shieldValue;
-}
-
-class _CompareSimilarTextselectedTable extends GeneratedReflectedField<CompareSimilarText, String> {
-  const _CompareSimilarTextselectedTable();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'selectedTable';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  String? get defaulValue => null;
-
-  @override
-  String getReservedValue({required CompareSimilarText? entity}) => entity!.selectedTable;
-}
-
-/*COMPARESIMILARTEXT METHODS*/
-
-class _CompareSimilarTextBuilder extends GeneratedReflectedMethod<CompareSimilarText, CompareSimilarText> {
-  const _CompareSimilarTextBuilder();
-  @override
-  String get name => '';
-
-  @override
-  bool get isStatic => true;
-
-  @override
-  MethodDetectedType get methodType => MethodDetectedType.buildMethod;
-
-  @override
-  List get annotations => const [];
-
-  static const _namfieldName = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: null,
-    hasDefaultValue: false,
-    acceptNulls: false,
-    name: 'fieldName',
-  );
-  static const _namsimilarText = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: null,
-    hasDefaultValue: false,
-    acceptNulls: false,
-    name: 'similarText',
-  );
-  static const _namshieldValue = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: true,
-    hasDefaultValue: true,
-    acceptNulls: false,
-    name: 'shieldValue',
-  );
-  static const _namselectedTable = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: '',
-    hasDefaultValue: true,
-    acceptNulls: false,
-    name: 'selectedTable',
-  );
-  @override
-  List<GeneratedReflectedFixedParameter> get fixedParameters => const [];
-
-  @override
-  List<GeneratedReflectedNamedParameter> get namedParameters => const [_namfieldName, _namsimilarText, _namshieldValue, _namselectedTable];
-
-  @override
-  CompareSimilarText callReservedMethod({required CompareSimilarText? entity, required List fixedValues, required Map<String, dynamic> namedValues}) => CompareSimilarText(
-        fieldName: _namfieldName.getValueFromMap(namedValues),
-        similarText: _namsimilarText.getValueFromMap(namedValues),
-        shieldValue: _namshieldValue.getValueFromMap(namedValues),
-        selectedTable: _namselectedTable.getValueFromMap(namedValues),
-      );
-}
-
-/*COMPARESIMILARTEXT INSTANCE*/
-
-class _CompareSimilarText extends GeneratedReflectedClass<CompareSimilarText> {
-  const _CompareSimilarText();
-  @override
-  List get annotations => const [reflect];
-
-  @override
-  Type? get baseClass => null;
-
-  @override
-  List<Type> get classThatImplement => const [IConditionQuery];
-
-  @override
-  bool get isAbstract => false;
-
-  @override
-  bool get isMixin => false;
-
-  @override
-  String get name => 'CompareSimilarText';
-
-  @override
-  List<GeneratedReflectedMethod> get methods => const [_CompareSimilarTextBuilder()];
-
-  @override
-  List<GeneratedReflectedField> get fields => const [_CompareSimilarTextfieldName(), _CompareSimilarTextsimilarText(), _CompareSimilarTextshieldValue(), _CompareSimilarTextselectedTable()];
-}
-/*----------------------------------   x   ----------------------------------*/
-
-/*----------------------------------   Class CompareIncludesValues   ----------------------------------*/
-
-/*COMPAREINCLUDESVALUES FIELDS*/
-
-class _CompareIncludesValuesfieldName extends GeneratedReflectedField<CompareIncludesValues, String> {
-  const _CompareIncludesValuesfieldName();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'fieldName';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  String? get defaulValue => null;
-
-  @override
-  String getReservedValue({required CompareIncludesValues? entity}) => entity!.fieldName;
-}
-
-class _CompareIncludesValuesselectedTable extends GeneratedReflectedField<CompareIncludesValues, String> {
-  const _CompareIncludesValuesselectedTable();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'selectedTable';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  String? get defaulValue => null;
-
-  @override
-  String getReservedValue({required CompareIncludesValues? entity}) => entity!.selectedTable;
-}
-
-class _CompareIncludesValuesoptions extends GeneratedReflectedField<CompareIncludesValues, List> {
-  const _CompareIncludesValuesoptions();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'options';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  List? get defaulValue => null;
-
-  @override
-  List getReservedValue({required CompareIncludesValues? entity}) => entity!.options;
-}
-
-class _CompareIncludesValuesshieldValue extends GeneratedReflectedField<CompareIncludesValues, bool> {
-  const _CompareIncludesValuesshieldValue();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'shieldValue';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  bool? get defaulValue => null;
-
-  @override
-  bool getReservedValue({required CompareIncludesValues? entity}) => entity!.shieldValue;
-}
-
-class _CompareIncludesValuesisInclusive extends GeneratedReflectedField<CompareIncludesValues, bool> {
-  const _CompareIncludesValuesisInclusive();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'isInclusive';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  bool? get defaulValue => null;
-
-  @override
-  bool getReservedValue({required CompareIncludesValues? entity}) => entity!.isInclusive;
-}
-
-/*COMPAREINCLUDESVALUES METHODS*/
-
-class _CompareIncludesValuesBuilder extends GeneratedReflectedMethod<CompareIncludesValues, CompareIncludesValues> {
-  const _CompareIncludesValuesBuilder();
-  @override
-  String get name => '';
-
-  @override
-  bool get isStatic => true;
-
-  @override
-  MethodDetectedType get methodType => MethodDetectedType.buildMethod;
-
-  @override
-  List get annotations => const [];
-
-  static const _namfieldName = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: null,
-    hasDefaultValue: false,
-    acceptNulls: false,
-    name: 'fieldName',
-  );
-  static const _namoptions = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: null,
-    hasDefaultValue: false,
-    acceptNulls: false,
-    name: 'options',
-  );
-  static const _namselectedTable = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: '',
-    hasDefaultValue: true,
-    acceptNulls: false,
-    name: 'selectedTable',
-  );
-  static const _namshieldValue = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: true,
-    hasDefaultValue: true,
-    acceptNulls: false,
-    name: 'shieldValue',
-  );
-  static const _namisInclusive = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: true,
-    hasDefaultValue: true,
-    acceptNulls: false,
-    name: 'isInclusive',
-  );
-  @override
-  List<GeneratedReflectedFixedParameter> get fixedParameters => const [];
-
-  @override
-  List<GeneratedReflectedNamedParameter> get namedParameters => const [_namfieldName, _namoptions, _namselectedTable, _namshieldValue, _namisInclusive];
-
-  @override
-  CompareIncludesValues callReservedMethod({required CompareIncludesValues? entity, required List fixedValues, required Map<String, dynamic> namedValues}) => CompareIncludesValues(
-        fieldName: _namfieldName.getValueFromMap(namedValues),
-        options: _namoptions.getValueFromMap(namedValues),
-        selectedTable: _namselectedTable.getValueFromMap(namedValues),
-        shieldValue: _namshieldValue.getValueFromMap(namedValues),
-        isInclusive: _namisInclusive.getValueFromMap(namedValues),
-      );
-}
-
-/*COMPAREINCLUDESVALUES INSTANCE*/
-
-class _CompareIncludesValues extends GeneratedReflectedClass<CompareIncludesValues> {
-  const _CompareIncludesValues();
-  @override
-  List get annotations => const [reflect];
-
-  @override
-  Type? get baseClass => null;
-
-  @override
-  List<Type> get classThatImplement => const [IConditionQuery];
-
-  @override
-  bool get isAbstract => false;
-
-  @override
-  bool get isMixin => false;
-
-  @override
-  String get name => 'CompareIncludesValues';
-
-  @override
-  List<GeneratedReflectedMethod> get methods => const [_CompareIncludesValuesBuilder()];
-
-  @override
-  List<GeneratedReflectedField> get fields =>
-      const [_CompareIncludesValuesfieldName(), _CompareIncludesValuesselectedTable(), _CompareIncludesValuesoptions(), _CompareIncludesValuesshieldValue(), _CompareIncludesValuesisInclusive()];
-}
-/*----------------------------------   x   ----------------------------------*/
-
-/*----------------------------------   Class CompareMultipleComparisons   ----------------------------------*/
-
-/*COMPAREMULTIPLECOMPARISONS FIELDS*/
-
-class _CompareMultipleComparisonstypeComparation extends GeneratedReflectedField<CompareMultipleComparisons, CompareMultipleComparisonsLogic> {
-  const _CompareMultipleComparisonstypeComparation();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'typeComparation';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  CompareMultipleComparisonsLogic? get defaulValue => null;
-
-  @override
-  CompareMultipleComparisonsLogic getReservedValue({required CompareMultipleComparisons? entity}) => entity!.typeComparation;
-}
-
-class _CompareMultipleComparisonsconditions extends GeneratedReflectedField<CompareMultipleComparisons, List<IConditionQuery>> {
-  const _CompareMultipleComparisonsconditions();
-  @override
-  List get annotations => const [];
-
-  @override
-  String get name => 'conditions';
-
-  @override
-  bool get isStatic => false;
-
-  @override
-  bool get isConst => false;
-
-  @override
-  bool get isLate => false;
-
-  @override
-  bool get isFinal => true;
-
-  @override
-  bool get acceptNull => false;
-
-  @override
-  bool get hasDefaultValue => false;
-  @override
-  List<IConditionQuery>? get defaulValue => null;
-
-  @override
-  List<IConditionQuery> getReservedValue({required CompareMultipleComparisons? entity}) => entity!.conditions;
-}
-
-/*COMPAREMULTIPLECOMPARISONS METHODS*/
-
-class _CompareMultipleComparisonsBuilder extends GeneratedReflectedMethod<CompareMultipleComparisons, CompareMultipleComparisons> {
-  const _CompareMultipleComparisonsBuilder();
-  @override
-  String get name => '';
-
-  @override
-  bool get isStatic => true;
-
-  @override
-  MethodDetectedType get methodType => MethodDetectedType.buildMethod;
-
-  @override
-  List get annotations => const [];
-
-  static const _namconditions = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: null,
-    hasDefaultValue: false,
-    acceptNulls: false,
-    name: 'conditions',
-  );
-  static const _namtypeComparation = GeneratedReflectedNamedParameter<dynamic>(
-    annotations: const [],
-    defaultValue: CompareMultipleComparisonsLogic.and,
-    hasDefaultValue: true,
-    acceptNulls: false,
-    name: 'typeComparation',
-  );
-  @override
-  List<GeneratedReflectedFixedParameter> get fixedParameters => const [];
-
-  @override
-  List<GeneratedReflectedNamedParameter> get namedParameters => const [_namconditions, _namtypeComparation];
-
-  @override
-  CompareMultipleComparisons callReservedMethod({required CompareMultipleComparisons? entity, required List fixedValues, required Map<String, dynamic> namedValues}) => CompareMultipleComparisons(
-        conditions: _namconditions.getValueFromMap(namedValues),
-        typeComparation: _namtypeComparation.getValueFromMap(namedValues),
-      );
-}
-
-/*COMPAREMULTIPLECOMPARISONS INSTANCE*/
-
-class _CompareMultipleComparisons extends GeneratedReflectedClass<CompareMultipleComparisons> {
-  const _CompareMultipleComparisons();
-  @override
-  List get annotations => const [reflect];
-
-  @override
-  Type? get baseClass => null;
-
-  @override
-  List<Type> get classThatImplement => const [IConditionQuery];
-
-  @override
-  bool get isAbstract => false;
-
-  @override
-  bool get isMixin => false;
-
-  @override
-  String get name => 'CompareMultipleComparisons';
-
-  @override
-  List<GeneratedReflectedMethod> get methods => const [_CompareMultipleComparisonsBuilder()];
-
-  @override
-  List<GeneratedReflectedField> get fields => const [_CompareMultipleComparisonstypeComparation(), _CompareMultipleComparisonsconditions()];
 }
 /*----------------------------------   x   ----------------------------------*/
 
@@ -3356,42 +2228,6 @@ class _DeleteCommand extends GeneratedReflectedClass<DeleteCommand> {
 
   @override
   List<GeneratedReflectedField> get fields => const [_DeleteCommandtableName(), _DeleteCommandconditions()];
-}
-/*----------------------------------   x   ----------------------------------*/
-
-/*----------------------------------   Class IConditionQuery   ----------------------------------*/
-
-/*ICONDITIONQUERY FIELDS*/
-
-/*ICONDITIONQUERY METHODS*/
-
-/*ICONDITIONQUERY INSTANCE*/
-
-class _IConditionQuery extends GeneratedReflectedClass<IConditionQuery> {
-  const _IConditionQuery();
-  @override
-  List get annotations => const [reflect];
-
-  @override
-  Type? get baseClass => null;
-
-  @override
-  List<Type> get classThatImplement => const [];
-
-  @override
-  bool get isAbstract => true;
-
-  @override
-  bool get isMixin => true;
-
-  @override
-  String get name => 'IConditionQuery';
-
-  @override
-  List<GeneratedReflectedMethod> get methods => const [];
-
-  @override
-  List<GeneratedReflectedField> get fields => const [];
 }
 /*----------------------------------   x   ----------------------------------*/
 
@@ -4887,7 +3723,9 @@ class _DataBaseEngineTemplateinternalReserveEngineMethod extends GeneratedReflec
   List<GeneratedReflectedNamedParameter> get namedParameters => const [_namfunction];
 
   @override
-  Future callReservedMethod({required DataBaseEngineTemplate? entity, required List fixedValues, required Map<String, dynamic> namedValues}) => entity!.internalReserveEngine(
+  Future callReservedMethod({required DataBaseEngineTemplate? entity, required List fixedValues, required Map<String, dynamic> namedValues}) =>
+// ignore: invalid_use_of_protected_member
+      entity!.internalReserveEngine(
         function: _namfunction.getValueFromMap(namedValues),
       );
 }
@@ -5004,8 +3842,8 @@ class _IDataBaseConfiguration extends GeneratedReflectedClass<IDataBaseConfigura
 }
 /*----------------------------------   x   ----------------------------------*/
 
-class _AlbumMaxiLibraryDbReflectors extends GeneratedReflectorAlbum {
-  const _AlbumMaxiLibraryDbReflectors();
+class _AlbumMaxiLibraryDb extends GeneratedReflectorAlbum {
+  const _AlbumMaxiLibraryDb();
   @override
   List<GeneratedReflectedClass> get classes => const [
         _QueryField(),
@@ -5014,16 +3852,10 @@ class _AlbumMaxiLibraryDbReflectors extends GeneratedReflectorAlbum {
         _ColumnAttributes(),
         _QueryTable(),
         _ForeignKey(),
-        _CompareFields(),
-        _CompareValue(),
-        _CompareSimilarText(),
-        _CompareIncludesValues(),
-        _CompareMultipleComparisons(),
         _QueryCommand(),
         _AggregatorCommand(),
         _ModifierCommand(),
         _DeleteCommand(),
-        _IConditionQuery(),
         _CreateTableCommand(),
         _IDataBaseEngineCapabilities(),
         _IDataBaseEngine(),
@@ -5033,7 +3865,7 @@ class _AlbumMaxiLibraryDbReflectors extends GeneratedReflectorAlbum {
       ];
 
   @override
-  List<TypeEnumeratorReflector> get enums => const [_QueryFieldTypeEnum(), _QueryJoinerTypeEnum(), _ColumnAttributesTypeEnum(), _CompareMultipleComparisonsLogicEnum(), _ConditionCompareTypeEnum()];
+  List<TypeEnumeratorReflector> get enums => const [_QueryFieldTypeEnum(), _QueryJoinerTypeEnum(), _ColumnAttributesTypeEnum()];
 }
 
-const maxiLibraryDbReflectors = _AlbumMaxiLibraryDbReflectors();
+const maxiLibraryDbReflectors = _AlbumMaxiLibraryDb();

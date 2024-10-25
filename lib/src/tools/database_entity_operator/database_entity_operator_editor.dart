@@ -80,6 +80,22 @@ class DatabaseEntityOperatorEditor<T> {
     return _tableOperator.editor.addAll(list: mapValue, checkFields: false);
   }
 
+  Future<void> assignAll({required List<T> list, bool verify = true}) async {
+    final idLIst = list.map((x) => _reflector.getPrimaryKey(instance: x)).toList();
+    final existens = await _query.checkWhichIdentifiersExistMap(identifier: idLIst);
+
+    final toModify = list.where((x) => existens[_reflector.getPrimaryKey(instance: x)]!).toList();
+    final toAdd = list.where((x) => !toModify.contains(x)).toList();
+
+    if (toModify.isNotEmpty) {
+      await modifySeveral(list: toModify, verify: verify);
+    }
+
+    if (toAdd.isNotEmpty) {
+      await addAll(list: toAdd, verify: verify);
+    }
+  }
+
   Future<void> modifySeveral({required List<T> list, bool verify = true}) async {
     if (verify) {
       _checkList(list: list);
@@ -115,6 +131,10 @@ class DatabaseEntityOperatorEditor<T> {
     }
   }
 
+  Future<void> delete({required List<IConditionQuery> conditions}) {
+    return _tableOperator.editor.delete(conditions: conditions);
+  }
+
   void _checkList({required List<T> list}) {
     int i = 1;
     for (final item in list) {
@@ -138,7 +158,7 @@ class DatabaseEntityOperatorEditor<T> {
         throw NegativeResultValue(
           identifier: NegativeResultCodes.invalidProperty,
           message: tr('The modification cannot be performed because item No. %1 does not have an assigned identifier', [i]),
-          name: tr( _reflector.primaryKey.name),
+          name: tr(_reflector.primaryKey.name),
           value: id,
         );
       }

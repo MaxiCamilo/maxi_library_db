@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:maxi_library/maxi_library.dart';
 
 @reflect
@@ -26,14 +24,16 @@ enum ColumnAttributesType {
 @reflect
 class ColumnAttributes {
   final String nameColumn;
-  final ColumnAttributesType type;
+  final IPrimitiveValueGenerator valueAdapter;
+  final ColumnAttributesType columnType;
   final bool isPrimaryKey;
   final bool isUniqueKey;
   final bool isAutoIncrement;
 
   const ColumnAttributes({
     required this.nameColumn,
-    required this.type,
+    required this.valueAdapter,
+    required this.columnType,
     this.isPrimaryKey = false,
     this.isUniqueKey = false,
     this.isAutoIncrement = false,
@@ -41,29 +41,30 @@ class ColumnAttributes {
 
   factory ColumnAttributes.fromDartType({
     required String nameColumn,
-    required Type type,
+    required IPrimitiveValueGenerator type,
     required bool isPrimaryKey,
     required bool isUniqueKey,
+    List<dynamic> annotations = const [],
   }) {
+
     return ColumnAttributes(
       nameColumn: nameColumn,
-      type: searchColumnType(type),
+      valueAdapter: type,
+      columnType: searchColumnType(type),
       isPrimaryKey: isPrimaryKey,
       isUniqueKey: isUniqueKey,
     );
   }
 
-  static ColumnAttributesType searchColumnType(Type dartType) {
-    return switch (dartType) {
-      const (String) => ColumnAttributesType.text,
-      const (int) => ColumnAttributesType.intWithoutLimit,
-      const (double) => ColumnAttributesType.doubleWithoutLimit,
-      const (num) => ColumnAttributesType.doubleWithoutLimit,
-      const (bool) => ColumnAttributesType.boolean,
-      const (Enum) => ColumnAttributesType.uint8,
-      const (DateTime) => ColumnAttributesType.dateTime,
-      const (Uint8List) || const (List<int>) => ColumnAttributesType.binary,
-      _ => throw NegativeResult(identifier: NegativeResultCodes.wrongType, message: tr('The type %1 is not compatible for a database column', [dartType.toString()]))
+  static ColumnAttributesType searchColumnType(IPrimitiveValueGenerator adapter) {
+    return switch (adapter.primitiveType) {
+      PrimitiesType.isInt => ColumnAttributesType.intWithoutLimit,
+      PrimitiesType.isDouble => ColumnAttributesType.doubleWithoutLimit,
+      PrimitiesType.isNum => ColumnAttributesType.doubleWithoutLimit,
+      PrimitiesType.isString => ColumnAttributesType.text,
+      PrimitiesType.isBoolean => ColumnAttributesType.boolean,
+      PrimitiesType.isDateTime => ColumnAttributesType.dateTime,
+      PrimitiesType.isBinary => ColumnAttributesType.binary,
     };
   }
 }
