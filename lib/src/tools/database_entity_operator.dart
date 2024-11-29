@@ -54,7 +54,7 @@ class DatabaseEntityOperator<T> with StartableFunctionality {
         nameColumn: field.name,
         type: posibleGenerator,
         isPrimaryKey: field.annotations.any((x) => x is PrimaryKey),
-        isUniqueKey: field.annotations.any((x) => x is UniqueKey),
+        isUniqueKey: field.annotations.any((x) => x is UniqueProperty),
       );
       columns.add(newColumn);
     }
