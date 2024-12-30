@@ -139,7 +139,7 @@ class DatabaseEntityOperatorEditor<T> {
     int i = 1;
     for (final item in list) {
       volatileFactory(
-        negativeFactory: (rn) => NegativeResultValue.fromNegativeResult(nr: rn, value: item, name: tr('Value number %1', [i])),
+        negativeFactory: (rn) => NegativeResultValue.fromNegativeResult(nr: rn, value: item, name: (i + 1).toString(), formalName: tr('Value number %1', [i])),
         function: () => _reflector.verifyValueDirectly(value: item, parentEntity: null),
       );
     }
@@ -158,7 +158,8 @@ class DatabaseEntityOperatorEditor<T> {
         throw NegativeResultValue(
           identifier: NegativeResultCodes.invalidProperty,
           message: tr('The modification cannot be performed because item No. %1 does not have an assigned identifier', [i]),
-          name: tr(_reflector.primaryKey.name),
+          name: (i + 1).toString(),
+          formalName: _reflector.primaryKey.formalName,
           value: id,
         );
       }
