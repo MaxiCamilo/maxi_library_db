@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:maxi_library/maxi_library.dart';
 import 'package:maxi_library_db/maxi_library_db.dart';
 import 'package:maxi_library_db/src/tools/database_entity_operator/database_entity_operator_querys.dart';
@@ -14,6 +16,14 @@ class DatabaseEntityOperatorEditor<T> {
   })  : _reflector = reflector,
         _tableOperator = tableOperator,
         _query = query;
+
+  void _listValuesToJson(List<Map<String, dynamic>> list) {
+    for (final map in list) {
+      for (final prop in map.entries.where((x) => x.value is List)) {
+        map[prop.key] = json.encode(prop.value);
+      }
+    }
+  }
 
   Future<void> changeToLatestIdentifier({required T value}) async {
     final newId = await _query.getMaximumIdentifier(conditions: const [], identifierColumn: _reflector.primaryKey.name);
@@ -40,6 +50,7 @@ class DatabaseEntityOperatorEditor<T> {
     }
 
     final mapValue = _reflector.serializeToMap(value);
+    _listValuesToJson([mapValue as Map<String, dynamic>]);
     return _tableOperator.editor.add(values: mapValue, checkFields: false);
   }
 
@@ -77,6 +88,7 @@ class DatabaseEntityOperatorEditor<T> {
     }
 
     final mapValue = list.map((x) => _reflector.serializeToMap(x)).cast<Map<String, dynamic>>().toList();
+    _listValuesToJson(mapValue);
     return _tableOperator.editor.addAll(list: mapValue, checkFields: false);
   }
 
@@ -120,6 +132,7 @@ class DatabaseEntityOperatorEditor<T> {
     }
 
     final mapValue = list.map((x) => _reflector.serializeToMap(x)).cast<Map<String, dynamic>>().toList();
+    _listValuesToJson(mapValue);
     return _tableOperator.editor.modifyAccordingColumn(list: mapValue, checkFields: false, columnName: _reflector.primaryKey.name);
   }
 
