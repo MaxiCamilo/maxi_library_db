@@ -170,7 +170,7 @@ class DatabaseTableOperatorQuerys {
     }
 
     checkProgrammingFailure(
-      thatChecks: tr('The result of the length query returned only one item'),
+      thatChecks: Oration(message: 'The result of the length query returned only one item'),
       result: () => result.length == 1 && result.first.length == 1,
     );
 
@@ -197,7 +197,7 @@ class DatabaseTableOperatorQuerys {
     }
 
     checkProgrammingFailure(
-      thatChecks:  tr('The result of the minimum identifier query returned only one item'),
+      thatChecks: Oration(message: 'The result of the minimum identifier query returned only one item'),
       result: () => result.length == 1 && result.first.length == 1,
     );
 
@@ -224,7 +224,7 @@ class DatabaseTableOperatorQuerys {
     }
 
     checkProgrammingFailure(
-      thatChecks:  tr('The result of the maximum identifier query returned only one item'),
+      thatChecks: Oration(message: 'The result of the maximum identifier query returned only one item'),
       result: () => result.length == 1 && result.first.length == 1,
     );
 

@@ -31,7 +31,9 @@ class DatabaseTableOperator with StartableFunctionality {
     if (!_hasOnlyOnePrimaryKey) {
       throw NegativeResult(
         identifier: NegativeResultCodes.contextInvalidFunctionality,
-        message: primaryKeyGroups.isEmpty ? tr('Table %1 does not possess an primary key', [tableName]) : tr('Table %1 does not possess an individual primary key', [tableName]),
+        message: primaryKeyGroups.isEmpty
+            ? Oration(message: 'Table %1 does not possess an primary key', textParts: [tableName])
+            : Oration(message: 'Table %1 does not possess an individual primary key', textParts: [tableName]),
       );
     }
 
@@ -49,8 +51,8 @@ class DatabaseTableOperator with StartableFunctionality {
     this.limits = const [],
     this.createTableIfNotExists = true,
   }) {
-    checkProgrammingFailure(thatChecks: tr('A non-empty list of primary keys was required'), result: () => primaryKeyGroups.every((x) => x.isNotEmpty));
-    checkProgrammingFailure(thatChecks: tr('A non-empty list of unique keys was required'), result: () => uniqueKeyGroups.every((x) => x.isNotEmpty));
+    checkProgrammingFailure(thatChecks: Oration(message: 'A non-empty list of primary keys was required'), result: () => primaryKeyGroups.every((x) => x.isNotEmpty));
+    checkProgrammingFailure(thatChecks: Oration(message: 'A non-empty list of unique keys was required'), result: () => uniqueKeyGroups.every((x) => x.isNotEmpty));
 
     if (primaryKeyGroups.isNotEmpty && primaryKeyGroups.length == 1 && primaryKeyGroups.first.length == 1) {
       _hasOnlyOnePrimaryKey = true;
@@ -84,7 +86,7 @@ class DatabaseTableOperator with StartableFunctionality {
         if (!values.containsKey(col.nameColumn)) {
           throw NegativeResult(
             identifier: NegativeResultCodes.invalidFunctionality,
-            message: tr('The field %1 is required for table %2, but was not defined in the values', [col.nameColumn, tableName]),
+            message: Oration(message: 'The field %1 is required for table %2, but was not defined in the values', textParts: [col.nameColumn, tableName]),
           );
         }
       }
@@ -98,7 +100,7 @@ class DatabaseTableOperator with StartableFunctionality {
         } else {
           throw NegativeResult(
             identifier: NegativeResultCodes.invalidFunctionality,
-            message: tr('The table %1 does not contains the column named %2', [tableName, item.key]),
+            message: Oration(message: 'The table %1 does not contains the column named %2', textParts: [tableName, item.key]),
           );
         }
         continue;

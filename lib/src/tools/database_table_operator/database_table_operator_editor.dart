@@ -10,7 +10,7 @@ class DatabaseTableOperatorEditor {
     if (propertyName != null && !parent.columns.any((x) => x.nameColumn == propertyName)) {
       throw NegativeResult(
         identifier: NegativeResultCodes.nonExistent,
-        message: tr('The table %1 does not contain property %2', [parent.tableName, propertyName]),
+        message: Oration(message: 'The table %1 does not contain property %2', textParts: [parent.tableName, propertyName]),
       );
     }
   }
@@ -97,7 +97,7 @@ class DatabaseTableOperatorEditor {
         if (!value.containsKey(columnName)) {
           throw NegativeResult(
             identifier: NegativeResultCodes.nonExistent,
-            message: tr('The item located at %1 was not defined the property named %2', [i, columnName]),
+            message: Oration(message: 'The item located at %1 was not defined the property named %2', textParts: [i, columnName]),
           );
         }
 

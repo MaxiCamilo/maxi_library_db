@@ -41,7 +41,7 @@ class DatabaseEntityOperatorQuerys<T> {
     );
 
     final list = _reflector.interpretAslist<T>(value: receivedMap, verify: verify, tryToCorrectNames: false);
-    checkProgrammingFailure(thatChecks: tr('Only returns one or zero items'), result: () => list.length < 2);
+    checkProgrammingFailure(thatChecks: Oration(message: 'Only returns one or zero items'), result: () => list.length < 2);
 
     return list.isEmpty ? null : list.first;
   }
@@ -54,7 +54,7 @@ class DatabaseEntityOperatorQuerys<T> {
     if (item == null) {
       throw NegativeResult(
         identifier: NegativeResultCodes.nonExistent,
-        message: tr('No item with the identifier %1 was found in the table'),
+        message: Oration(message: 'No item with the identifier %1 was found in the table'),
       );
     } else {
       return item;

@@ -11,7 +11,7 @@ mixin DatabaseTableOperatorInit {
       } else {
         throw NegativeResult(
           identifier: NegativeResultCodes.contextInvalidFunctionality,
-          message: tr('Table %1 not exists', [parent.tableName]),
+          message: Oration(message: 'Table %1 not exists',textParts: [parent.tableName]),
         );
       }
     }
@@ -24,7 +24,7 @@ mixin DatabaseTableOperatorInit {
       if (!existingColumn.any((x) => x == field.nameColumn)) {
         throw NegativeResult(
           identifier: NegativeResultCodes.contextInvalidFunctionality,
-          message: tr('The table %1 does not possess a column named %2', [parent.tableName, field.nameColumn]),
+          message: Oration(message: 'The table %1 does not possess a column named %2', textParts:[parent.tableName, field.nameColumn]),
         );
       }
       existingColumn.remove(field.nameColumn);
@@ -33,7 +33,8 @@ mixin DatabaseTableOperatorInit {
     if (existingColumn.isNotEmpty) {
       throw NegativeResult(
         identifier: NegativeResultCodes.contextInvalidFunctionality,
-        message: tr('The table %1 has %2 extra columns, it cannot be used with the current context (the columns are %3)', [parent.tableName, existingColumn.length, TextUtilities.generateCommand(list: existingColumn)]),
+        message: Oration(
+            message: 'The table %1 has %2 extra columns, it cannot be used with the current context (the columns are %3)', textParts:[parent.tableName, existingColumn.length, TextUtilities.generateCommand(list: existingColumn)]),
       );
     }
   }
