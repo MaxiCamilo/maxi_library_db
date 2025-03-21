@@ -3,5 +3,8 @@ import 'package:maxi_library_db/maxi_library_db.dart';
 
 @reflect
 mixin IDataBaseConfiguration {
-  IDataBaseEngine generateEngine();
+  IDataBaseEngine generateEngine({
+    List<ISemaphore> synchronizerSemaphores = const [],
+    List<ISemaphore> lockersSemaphores = const [],
+  });
 }

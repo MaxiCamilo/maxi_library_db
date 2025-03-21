@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:maxi_library/maxi_library.dart';
 import 'package:maxi_library_db/maxi_library_db.dart';
 import 'package:meta/meta.dart';
@@ -6,6 +8,9 @@ import 'package:meta/meta.dart';
 abstract class DataBaseEngineTemplate with IDataBaseEngineCapabilities, IDataBaseEngine {
   final _synchronizerEngine = Semaphore();
 
+  final List<ISemaphore> synchronizerSemaphores;
+  final List<ISemaphore> lockersSemaphores;
+
   bool get inTransaction;
 
   Future<void> createTransaction();
@@ -13,6 +18,9 @@ abstract class DataBaseEngineTemplate with IDataBaseEngineCapabilities, IDataBas
   Future<void> rollbackTransaction();
   Future<void> prepareEngine();
   Future<void> releaseEngine();
+  Future<void> closeDatabasePermanently([FutureOr<void> Function()? reservedFunction]);
+
+  DataBaseEngineTemplate({required this.synchronizerSemaphores, required this.lockersSemaphores});
 
   @override
   Future<bool> checkTableExists({required String tableName}) {
@@ -88,13 +96,21 @@ abstract class DataBaseEngineTemplate with IDataBaseEngineCapabilities, IDataBas
   Future<List<String>> getTableColumnsNameDirectly({required String tableName});
 
   @override
-  Future<T> reserveEngine<T>({required Future<T> Function(IDataBaseEngineCapabilities p1) function}) {
+  Future<T> reserveEngine<T>({required Future<T> Function(IDataBaseEngineCapabilities p1) function}) async {
+    for (final locker in lockersSemaphores) {
+      if (await locker.checkIfLocker) {
+        await locker.awaitFullCompletion();
+      }
+    }
+
+    final synchronizerLockers = await Future.wait(synchronizerSemaphores.map((e) => e.buildAsyncLocker()));
     return _synchronizerEngine.execute(function: () async {
       await prepareEngine();
       try {
         return await function(_DataBaseEngineTemplateReserved(baseEngine: this));
       } finally {
-        await releaseEngine();
+        await containErrorLogAsync(detail: const Oration(message: 'Release engine'), function: () => releaseEngine());
+        synchronizerLockers.map((x) => x.completeIfIncomplete(null));
       }
     });
   }
