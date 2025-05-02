@@ -46,7 +46,6 @@ class ColumnAttributes {
     required bool isUniqueKey,
     List<dynamic> annotations = const [],
   }) {
-
     return ColumnAttributes(
       nameColumn: nameColumn,
       valueAdapter: type,
@@ -65,6 +64,7 @@ class ColumnAttributes {
       PrimitiesType.isBoolean => ColumnAttributesType.boolean,
       PrimitiesType.isDateTime => ColumnAttributesType.dateTime,
       PrimitiesType.isBinary => ColumnAttributesType.binary,
+      PrimitiesType.isObjectMap => ColumnAttributesType.text,
     };
   }
 }
