@@ -9,7 +9,9 @@ class DatabaseEntityOperatorEditor<T> {
   final DatabaseTableOperator _tableOperator;
   final DatabaseEntityOperatorQuerys<T> _query;
 
-  const DatabaseEntityOperatorEditor({
+  final _synchronizer = Semaphore();
+
+  DatabaseEntityOperatorEditor({
     required ITypeEntityReflection reflector,
     required DatabaseTableOperator tableOperator,
     required DatabaseEntityOperatorQuerys<T> query,
@@ -25,12 +27,16 @@ class DatabaseEntityOperatorEditor<T> {
     }
   }
 
-  Future<void> changeToLatestIdentifier({required T value}) async {
+  Future<void> changeToLatestIdentifier({required T value}) => _synchronizer.execute(function: () => _changeToLatestIdentifierInsured(value: value));
+
+  Future<void> _changeToLatestIdentifierInsured({required T value}) async {
     final newId = await _query.getMaximumIdentifier(conditions: const [], identifierColumn: _reflector.primaryKey.name);
     _reflector.changePrimaryKey(instance: value, newId: newId + 1);
   }
 
-  Future<void> add({required T value, bool verify = true}) async {
+  Future<void> add({required T value, bool verify = true}) => _synchronizer.execute(function: () => _addInsured(value: value, verify: verify));
+
+  Future<void> _addInsured({required T value, bool verify = true}) async {
     if (verify) {
       _reflector.verifyValueDirectly(value: value, parentEntity: null);
     }
@@ -51,10 +57,12 @@ class DatabaseEntityOperatorEditor<T> {
 
     final mapValue = _reflector.serializeToMap(value);
     _listValuesToJson([mapValue as Map<String, dynamic>]);
-    return _tableOperator.editor.add(values: mapValue, checkFields: false);
+    await _tableOperator.editor.add(values: mapValue, checkFields: false);
   }
 
-  Future<void> addAll({required List<T> list, bool verify = true}) async {
+  Future<void> addAll({required List<T> list, bool verify = true}) => _synchronizer.execute(function: () => _addAllInsured(list: list, verify: verify));
+
+  Future<void> _addAllInsured({required List<T> list, bool verify = true}) async {
     if (verify) {
       _checkList(list: list);
     }
@@ -89,10 +97,12 @@ class DatabaseEntityOperatorEditor<T> {
 
     final mapValue = list.map((x) => _reflector.serializeToMap(x)).cast<Map<String, dynamic>>().toList();
     _listValuesToJson(mapValue);
-    return _tableOperator.editor.addAll(list: mapValue, checkFields: false);
+    await _tableOperator.editor.addAll(list: mapValue, checkFields: false);
   }
 
-  Future<void> assignAll({required List<T> list, bool verify = true}) async {
+  Future<void> assignAll({required List<T> list, bool verify = true}) => _synchronizer.execute(function: () => _assignAllInsured(list: list, verify: verify));
+
+  Future<void> _assignAllInsured({required List<T> list, bool verify = true}) async {
     final idLIst = list.map((x) => _reflector.getPrimaryKey(instance: x)).toList();
     final existens = await _query.checkWhichIdentifiersExistMap(identifier: idLIst);
 
@@ -100,15 +110,17 @@ class DatabaseEntityOperatorEditor<T> {
     final toAdd = list.where((x) => !toModify.contains(x)).toList();
 
     if (toModify.isNotEmpty) {
-      await modifySeveral(list: toModify, verify: verify);
+      await _modifySeveralInsured(list: toModify, verify: verify);
     }
 
     if (toAdd.isNotEmpty) {
-      await addAll(list: toAdd, verify: verify);
+      await _addAllInsured(list: toAdd, verify: verify);
     }
   }
 
-  Future<void> modifySeveral({required List<T> list, bool verify = true}) async {
+  Future<void> modifySeveral({required List<T> list, bool verify = true}) => _synchronizer.execute(function: () => _modifySeveralInsured(list: list, verify: verify));
+
+  Future<void> _modifySeveralInsured({required List<T> list, bool verify = true}) async {
     if (verify) {
       _checkList(list: list);
       _checkIfNotZeroId(list: list);
@@ -133,18 +145,22 @@ class DatabaseEntityOperatorEditor<T> {
 
     final mapValue = list.map((x) => _reflector.serializeToMap(x)).cast<Map<String, dynamic>>().toList();
     _listValuesToJson(mapValue);
-    return _tableOperator.editor.modifyAccordingColumn(list: mapValue, checkFields: false, columnName: _reflector.primaryKey.name);
+    await _tableOperator.editor.modifyAccordingColumn(list: mapValue, checkFields: false, columnName: _reflector.primaryKey.name);
   }
 
-  Future<void> deleteAll() => _tableOperator.editor.deleteAll();
+  Future<void> deleteAll() => _synchronizer.execute(function: () => _tableOperator.editor.deleteAll());
 
-  Future<void> deleteSpecifics({required List<int> identifiers}) async {
+  Future<void> deleteSpecifics({required List<int> identifiers}) => _synchronizer.execute(function: () => _deleteSpecificsInsured(identifiers: identifiers));
+
+  Future<void> _deleteSpecificsInsured({required List<int> identifiers}) async {
     for (final part in identifiers.splitIntoParts(1000)) {
       await _tableOperator.editor.deleteAccordingColumn(list: part);
     }
   }
 
-  Future<void> delete({required List<IConditionQuery> conditions}) {
+  Future<void> delete({required List<IConditionQuery> conditions}) => _synchronizer.execute(function: () => _deleteInsured(conditions: conditions));
+
+  Future<void> _deleteInsured({required List<IConditionQuery> conditions}) {
     return _tableOperator.editor.delete(conditions: conditions);
   }
 
