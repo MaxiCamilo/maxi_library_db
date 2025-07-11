@@ -177,6 +177,23 @@ class DatabaseTableOperatorQuerys {
     return (result.first.values.first as num).toInt();
   }
 
+  Future<bool> any({
+    List<IConditionQuery> conditions = const [],
+  }) async {
+    final result = await getValues(
+      selectedFields: [QueryField(fieldName: parent.nameOnlyOnePrimaryKey)],
+      conditions: conditions,
+      joins: const [],
+      minimun: null,
+      maximum: null,
+      limit: 1,
+      identifierColumn: null,
+      order: DatabaseTableOperatorOrderType.none,
+    );
+
+    return result.isNotEmpty;
+  }
+
   Future<int> getMinimumIdentifier({
     List<IConditionQuery> conditions = const [],
     String? identifierColumn,

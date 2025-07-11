@@ -34,16 +34,16 @@ class DatabaseEntityOperatorEditor<T> {
     _reflector.changePrimaryKey(instance: value, newId: newId + 1);
   }
 
-  Future<void> add({required T value, bool verify = true}) => _synchronizer.execute(function: () => _addInsured(value: value, verify: verify));
+  Future<int> add({required T value, bool verify = true}) => _synchronizer.execute(function: () => _addInsured(value: value, verify: verify));
 
-  Future<void> _addInsured({required T value, bool verify = true}) async {
+  Future<int> _addInsured({required T value, bool verify = true}) async {
     if (verify) {
       _reflector.verifyValueDirectly(value: value, parentEntity: null);
     }
 
     if (_reflector.hasPrimaryKey) {
       if (_reflector.getPrimaryKey(instance: value) == 0) {
-        await changeToLatestIdentifier(value: value);
+        await _changeToLatestIdentifierInsured(value: value);
       } else if ((await _query.checkWhichIdentifiersExist(identifier: [_reflector.getPrimaryKey(instance: value)]).toList()).first.entries.first.value) {
         throw NegativeResult(
           identifier: NegativeResultCodes.contextInvalidFunctionality,
@@ -58,6 +58,12 @@ class DatabaseEntityOperatorEditor<T> {
     final mapValue = _reflector.serializeToMap(value);
     _listValuesToJson([mapValue as Map<String, dynamic>]);
     await _tableOperator.editor.add(values: mapValue, checkFields: false);
+
+    if (_reflector.hasPrimaryKey) {
+      return _reflector.getPrimaryKey(instance: value);
+    } else {
+      return 0;
+    }
   }
 
   Future<void> addAll({required List<T> list, bool verify = true}) => _synchronizer.execute(function: () => _addAllInsured(list: list, verify: verify));

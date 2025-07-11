@@ -32,6 +32,32 @@ class DatabaseEntityOperatorQuerys<T> {
     return _reflector.interpretAslist<T>(value: receivedMap, verify: verify, tryToCorrectNames: false);
   }
 
+  
+
+  Future<T?> getOneValue({
+    List<IConditionQuery> conditions = const [],
+    bool verify = true,
+    int? minimun,
+    int? maximum,
+    String? identifierColumn,
+  }) async {
+    final receivedMap = await _tableOperator.querys.getValues(
+      conditions: conditions,
+      minimun: minimun,
+      maximum: maximum,
+      identifierColumn: identifierColumn,
+      limit: 1,
+    );
+
+    if (receivedMap.isEmpty) {
+      return null;
+    }
+
+    final list = _reflector.interpretAslist<T>(value: receivedMap.first, verify: verify, tryToCorrectNames: false);
+
+    return list.first;
+  }
+
   Future<T?> getByIdentifierOptional({
     required int identifier,
     bool verify = true,
@@ -103,6 +129,11 @@ class DatabaseEntityOperatorQuerys<T> {
     List<IConditionQuery> conditions = const [],
   }) =>
       _tableOperator.querys.getLength(conditions: conditions);
+
+  Future<bool> any({
+    List<IConditionQuery> conditions = const [],
+  }) =>
+      _tableOperator.querys.any(conditions: conditions);
 
   Future<int> getMinimumIdentifier({
     List<IConditionQuery> conditions = const [],
