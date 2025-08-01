@@ -2,8 +2,6 @@ import 'dart:developer';
 
 import 'package:maxi_library/maxi_library.dart';
 import 'package:maxi_library_db/maxi_library_db.dart';
-import 'package:maxi_library_db/src/tools/database_entity_operator/database_entity_operator_editor.dart';
-import 'package:maxi_library_db/src/tools/database_entity_operator/database_entity_operator_querys.dart';
 
 class DatabaseEntityOperator<T> with StartableFunctionality {
   final IDataBaseEngineCapabilities engine;

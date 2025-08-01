@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:maxi_library/maxi_library.dart';
 import 'package:maxi_library_db/maxi_library_db.dart';
-import 'package:maxi_library_db/src/tools/database_entity_operator/database_entity_operator_querys.dart';
 
 class DatabaseEntityOperatorEditor<T> {
   final ITypeEntityReflection _reflector;
@@ -66,9 +65,9 @@ class DatabaseEntityOperatorEditor<T> {
     }
   }
 
-  Future<void> addAll({required List<T> list, bool verify = true}) => _synchronizer.execute(function: () => _addAllInsured(list: list, verify: verify));
+  Future<List<T>> addAll({required List<T> list, bool verify = true}) => _synchronizer.execute(function: () => _addAllInsured(list: list, verify: verify));
 
-  Future<void> _addAllInsured({required List<T> list, bool verify = true}) async {
+  Future<List<T>> _addAllInsured({required List<T> list, bool verify = true}) async {
     if (verify) {
       _checkList(list: list);
     }
@@ -104,7 +103,11 @@ class DatabaseEntityOperatorEditor<T> {
     final mapValue = list.map((x) => _reflector.serializeToMap(x)).cast<Map<String, dynamic>>().toList();
     _listValuesToJson(mapValue);
     await _tableOperator.editor.addAll(list: mapValue, checkFields: false);
+
+    return list;
   }
+
+  Future<void> assign({required T value, bool verify = true}) => assignAll(list: [value], verify: verify);
 
   Future<void> assignAll({required List<T> list, bool verify = true}) => _synchronizer.execute(function: () => _assignAllInsured(list: list, verify: verify));
 

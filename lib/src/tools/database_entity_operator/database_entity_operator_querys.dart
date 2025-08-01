@@ -11,6 +11,17 @@ class DatabaseEntityOperatorQuerys<T> {
   })  : _reflector = reflector,
         _tableOperator = tableOperator;
 
+  Future<List<Map<String, dynamic>>> rawQuery({
+    List<QueryField> selectedFields = const [],
+    List<IConditionQuery> conditions = const [],
+    List<QueryJoiner> joins = const [],
+    int? minimun,
+    int? maximum,
+    int? limit,
+    DatabaseTableOperatorOrderType order = DatabaseTableOperatorOrderType.none,
+  }) =>
+      _tableOperator.querys.getValues(selectedFields: selectedFields, conditions: conditions, joins: joins, limit: limit, maximum: maximum, minimun: minimun);
+
   Future<List<T>> getValues({
     List<IConditionQuery> conditions = const [],
     int? minimun,
@@ -31,8 +42,6 @@ class DatabaseEntityOperatorQuerys<T> {
 
     return _reflector.interpretAslist<T>(value: receivedMap, verify: verify, tryToCorrectNames: false);
   }
-
-  
 
   Future<T?> getOneValue({
     List<IConditionQuery> conditions = const [],
@@ -80,7 +89,7 @@ class DatabaseEntityOperatorQuerys<T> {
     if (item == null) {
       throw NegativeResult(
         identifier: NegativeResultCodes.nonExistent,
-        message: Oration(message: 'No item with the identifier %1 was found in the table'),
+        message: Oration(message: 'No item with the identifier %1 was found in the table', textParts: [identifier]),
       );
     } else {
       return item;
@@ -160,6 +169,28 @@ class DatabaseEntityOperatorQuerys<T> {
     return _reflector.interpretAslist<T>(value: receivedMap, verify: verify, tryToCorrectNames: false);
   }
 
+  Future<List<T>> getDeterminateValuesViaID({
+    required List<int> identifiers,
+    bool verify = true,
+    bool everyoneMustBeThere = true,
+  }) async {
+    final result = await getValues(conditions: [CompareIncludesValues(fieldName: _reflector.primaryKey.name, options: identifiers)]);
+
+    if (everyoneMustBeThere && identifiers.length != result.length) {
+      final nonExists = identifiers.where((x) => !result.any((y) => _reflector.getPrimaryKey(instance: y) == x)).toList();
+
+      throw NegativeResult(
+        identifier: NegativeResultCodes.nonExistent,
+        message: Oration(
+          message: 'The database request was expected to yield %1 items, but only %2 item(s) were returned (e.g., %3 are missing...)',
+          textParts: [identifiers.length, result.length, nonExists.extractFrom(0, 5).join(',')],
+        ),
+      );
+    }
+
+    return result;
+  }
+
   Stream<List<int>> streamIdentifiers({
     int? maximum,
     int minimun = 0,
@@ -194,5 +225,85 @@ class DatabaseEntityOperatorQuerys<T> {
     }
 
     return map;
+  }
+
+  Future<(List<T>, List<T>)> makeListCategorizedByExistant({required List<T> items, int range = 1000}) async {
+    final existing = <T>[];
+    final inexistent = <T>[];
+
+    for (final part in items.splitIntoParts(range)) {
+      final status = await checkWhichIdentifiersExistMap(identifier: ReflectionManager.getIdentifierList(part), range: range);
+      for (final item in part) {
+        if (status[ReflectionManager.getIdentifier(item)] == true) {
+          existing.add(item);
+        } else {
+          inexistent.add(item);
+        }
+      }
+    }
+
+    return (existing, inexistent);
+  }
+
+  Future<(List<T>, List<int>)> categorizeExistingIdentifiers({required List<int> identifiers, int range = 1000}) async {
+    final existing = <T>[];
+    final inexistent = <int>[];
+
+    for (final part in identifiers.splitIntoParts(range)) {
+      final existingID = <int>[];
+      final status = await checkWhichIdentifiersExistMap(identifier: part, range: range);
+      for (final item in part) {
+        if (status[ReflectionManager.getIdentifier(item)] == true) {
+          existingID.add(item);
+        } else {
+          inexistent.add(item);
+        }
+      }
+
+      existing.addAll(await getDeterminateValuesViaID(identifiers: existingID));
+    }
+
+    return (existing, inexistent);
+  }
+
+  Future<Map<int, dynamic>> getColumnValues({
+    required String columnName,
+    List<IConditionQuery> conditions = const [],
+    List<QueryJoiner> joins = const [],
+    List<int>? identifiers,
+    int? minimun,
+    int? maximum,
+    int? limit,
+    DatabaseTableOperatorOrderType order = DatabaseTableOperatorOrderType.none,
+  }) async {
+    final field = _reflector.fields.selectRequiredItem(
+      (x) => x.name == columnName,
+      Oration(
+        message: 'field %1 not found in class %2',
+        textParts: [columnName, _reflector.name],
+      ),
+    );
+
+    final totalConditions = <IConditionQuery>[...conditions];
+    if (identifiers != null) {
+      totalConditions.add(CompareIncludesValues(fieldName: _reflector.primaryKey.name, options: identifiers));
+    }
+
+    final values = await _tableOperator.querys.getValues(
+      conditions: totalConditions,
+      maximum: maximum,
+      minimun: minimun,
+      limit: limit,
+      joins: joins,
+      order: order,
+      selectedFields: [
+        QueryField(fieldName: _reflector.primaryKey.name),
+        QueryField(fieldName: columnName),
+      ],
+    );
+
+    return values.map((x) => (x[_reflector.primaryKey.name] as int, x[columnName])).map((x) {
+      return MapEntry<int, dynamic>(x.$1, field.reflectedType.convertObject(x.$2));
+    }).toMap();
   }
 }
