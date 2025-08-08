@@ -10,13 +10,17 @@ class DatabaseEntityOperatorEditor<T> {
 
   final _synchronizer = Semaphore();
 
+  late final List<IFieldReflection> _uniqueProperties;
+
   DatabaseEntityOperatorEditor({
     required ITypeEntityReflection reflector,
     required DatabaseTableOperator tableOperator,
     required DatabaseEntityOperatorQuerys<T> query,
   })  : _reflector = reflector,
         _tableOperator = tableOperator,
-        _query = query;
+        _query = query {
+    _uniqueProperties = _reflector.fields.where((x) => x.isUnique).toList();
+  }
 
   void _listValuesToJson(List<Map<String, dynamic>> list) {
     for (final map in list) {
@@ -68,6 +72,10 @@ class DatabaseEntityOperatorEditor<T> {
   Future<List<T>> addAll({required List<T> list, bool verify = true}) => _synchronizer.execute(function: () => _addAllInsured(list: list, verify: verify));
 
   Future<List<T>> _addAllInsured({required List<T> list, bool verify = true}) async {
+    if (list.isEmpty) {
+      return [];
+    }
+
     if (verify) {
       _checkList(list: list);
     }
@@ -89,6 +97,8 @@ class DatabaseEntityOperatorEditor<T> {
       }
     }
 
+    await _checkUniqueProperties(list);
+
     if (_reflector.hasPrimaryKey) {
       int? lastId;
       for (final item in list) {
@@ -107,11 +117,37 @@ class DatabaseEntityOperatorEditor<T> {
     return list;
   }
 
+  Future<void> _checkUniqueProperties(List<T> list) async {
+    for (final pro in _uniqueProperties) {
+      for (final item in list) {
+        final value = pro.getValue(instance: item);
+        final id = _reflector.getPrimaryKey(instance: item);
+        final otherID = await _query.anyID(conditions: [
+          CompareValue(originField: pro.name, value: value),
+          CompareValue(originField: _reflector.primaryKey.name, value: id, typeComparation: ConditionCompareType.notEqual),
+        ]);
+
+        if (otherID != null) {
+          throw NegativeResult(
+            identifier: NegativeResultCodes.contextInvalidFunctionality,
+            message: Oration(
+              message: 'The item with identifier %1 has the same value for property %2; there cannot be two or more items with the same value',
+              textParts: [otherID, pro.formalName],
+            ),
+          );
+        }
+      }
+    }
+  }
+
   Future<void> assign({required T value, bool verify = true}) => assignAll(list: [value], verify: verify);
 
   Future<void> assignAll({required List<T> list, bool verify = true}) => _synchronizer.execute(function: () => _assignAllInsured(list: list, verify: verify));
 
   Future<void> _assignAllInsured({required List<T> list, bool verify = true}) async {
+    if (list.isEmpty) {
+      return;
+    }
     final idLIst = list.map((x) => _reflector.getPrimaryKey(instance: x)).toList();
     final existens = await _query.checkWhichIdentifiersExistMap(identifier: idLIst);
 
@@ -130,6 +166,10 @@ class DatabaseEntityOperatorEditor<T> {
   Future<void> modifySeveral({required List<T> list, bool verify = true}) => _synchronizer.execute(function: () => _modifySeveralInsured(list: list, verify: verify));
 
   Future<void> _modifySeveralInsured({required List<T> list, bool verify = true}) async {
+    if (list.isEmpty) {
+      return;
+    }
+
     if (verify) {
       _checkList(list: list);
       _checkIfNotZeroId(list: list);
@@ -151,6 +191,8 @@ class DatabaseEntityOperatorEditor<T> {
         }
       }
     }
+
+    await _checkUniqueProperties(list);
 
     final mapValue = list.map((x) => _reflector.serializeToMap(x)).cast<Map<String, dynamic>>().toList();
     _listValuesToJson(mapValue);

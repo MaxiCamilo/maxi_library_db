@@ -67,6 +67,8 @@ class DatabaseEntityOperatorQuerys<T> {
     return list.first;
   }
 
+  Future<bool> identifierExists(int id) => any(conditions: [CompareValue(originField: _tableOperator.nameOnlyOnePrimaryKey, value: id)]);
+
   Future<T?> getByIdentifierOptional({
     required int identifier,
     bool verify = true,
@@ -143,6 +145,27 @@ class DatabaseEntityOperatorQuerys<T> {
     List<IConditionQuery> conditions = const [],
   }) =>
       _tableOperator.querys.any(conditions: conditions);
+
+  Future<int?> anyID({
+    List<IConditionQuery> conditions = const [],
+  }) async {
+    final result = await _tableOperator.querys.getValues(
+      selectedFields: [QueryField(fieldName: _tableOperator.nameOnlyOnePrimaryKey)],
+      conditions: conditions,
+      joins: const [],
+      minimun: null,
+      maximum: null,
+      limit: 1,
+      identifierColumn: null,
+      order: DatabaseTableOperatorOrderType.none,
+    );
+
+    if (result.isEmpty || result.first.isEmpty || result.first[_tableOperator.nameOnlyOnePrimaryKey] == null) {
+      return null;
+    } else {
+      return ConverterUtilities.toInt(value: result.first[_tableOperator.nameOnlyOnePrimaryKey]);
+    }
+  }
 
   Future<int> getMinimumIdentifier({
     List<IConditionQuery> conditions = const [],
