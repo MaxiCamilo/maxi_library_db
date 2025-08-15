@@ -86,12 +86,13 @@ class DatabaseEntityOperatorQuerys<T> {
   Future<T> getByIdentifier({
     required int identifier,
     bool verify = true,
+    Oration? errorMessage,
   }) async {
     final item = await getByIdentifierOptional(identifier: identifier, verify: verify);
     if (item == null) {
       throw NegativeResult(
         identifier: NegativeResultCodes.nonExistent,
-        message: Oration(message: 'No item with the identifier %1 was found in the table', textParts: [identifier]),
+        message: errorMessage ?? Oration(message: 'No item with the identifier %1 was found in the table', textParts: [identifier]),
       );
     } else {
       return item;
